@@ -37,12 +37,12 @@ class UserResolver {
 class Channels extends React.Component {
     constructor() {
         super();
-    }
-    componentDidMount() {
-        this.setState({
+        this.state = {
             message: "loading",
             data: []
-        });
+        };
+    }
+    componentDidMount() {
         this.fetchData();
     }
     fetchData() {
@@ -67,7 +67,6 @@ class Channels extends React.Component {
         ReactDOM.render(React.createElement(DateSelector, channel), document.getElementById('date'));
     }
     render() {
-        if(! this.state) return <div>?? no state</div>;
         if(this.state.message) {
             return (<div>{this.state.message}</div>);
         } else {
@@ -100,12 +99,12 @@ class DateSelector extends React.Component {
 class HistoryView extends React.Component {
     constructor() {
         super();
-    }
-    componentDidMount() {
-        this.setState({
+        this.state = {
             message: "loading",
             data: []
-        });
+        };
+    }
+    componentDidMount() {
         this.fetchHistory(this.props);
     }
     componentWillReceiveProps(nextProps) {
@@ -127,7 +126,6 @@ class HistoryView extends React.Component {
         });
     }
     render() {
-        if(! this.state) return <div>?? no state</div>;
         if(this.state.message) {
             return (<div>{this.state.message}</div>);
         } else {
