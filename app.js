@@ -75,13 +75,13 @@ class HistoryView extends React.Component {
             message: "loading",
             data: []
         });
-        this.fetchHistory();
+        this.fetchHistory(this.props);
     }
-    componentWillReceiveProps() {
-        this.fetchHistory();
+    componentWillReceiveProps(nextProps) {
+        this.fetchHistory(nextProps);
     }
-    fetchHistory() {
-        $.getJSON("slack_export/" + this.props.channel.name + "/" + this.props.date + ".json")
+    fetchHistory(props) {
+        $.getJSON("slack_export/" + props.channel.name + "/" + props.date + ".json")
         .done(data => {
             this.setState({
                 message: "",
