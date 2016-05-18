@@ -136,7 +136,7 @@ class HistoryView extends React.Component {
             };
             let nodes = this.state.data.map((m,i) => {
                 let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} {userResolver.find(m.user).name}</span>;
-                return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} childBefore={header} /></li>);
+                return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} softBreak="br" childBefore={header} /></li>);
             })
             return (<ul>{nodes}</ul>);
         }
