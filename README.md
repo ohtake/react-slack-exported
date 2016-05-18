@@ -2,11 +2,11 @@
 
 You can view [exported Slack history json](https://get.slack.help/hc/en-us/articles/201658943-Exporting-your-team-s-Slack-history) with React.
 
-I have tested this application with [Standard Exports](https://get.slack.help/hc/en-us/articles/204897248), never tested with Compliance Exports.
+I have tested this application with [export option for Free plan](https://get.slack.help/hc/en-us/articles/204897248), never tested with other options.
 
 ## Export
 
-1. [Export Slack history](https://my.slack.com/services/export) and wait its complition.
+1. [Export Slack history](https://my.slack.com/services/export) and wait its completion.
 1. Download and extract the zip file into `slack_export` directory.
 
 ## Develop
