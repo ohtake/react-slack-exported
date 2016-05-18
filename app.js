@@ -32,6 +32,7 @@ class Channels extends React.Component {
     handleChannelSelect(e) {
         e.preventDefault();
         let channel = this.state.data[$(e.target).data("index")];
+        this.setState({activeChannel: channel.name})
         ReactDOM.render(React.createElement(DateSelector, channel), document.getElementById('date'));
     }
     render() {
@@ -40,7 +41,7 @@ class Channels extends React.Component {
             return (<div>{this.state.message}</div>);
         } else {
             let nodes = this.state.data.map((c,i) => {
-              return (<li key={c.id}><a onClick={this.handleChannelSelect.bind(this)} href="#" data-index={i}>#{c.name}</a></li>);
+              return (<li key={c.id} className={(c.name == this.state.activeChannel) ? "active" : ""}><a onClick={this.handleChannelSelect.bind(this)} href="#" data-index={i}>#{c.name}</a></li>);
             })
             return (<ul>{nodes}</ul>);
         }
@@ -60,8 +61,7 @@ class DateSelector extends React.Component {
         let pad2 = n => { return ("0"+n).slice(-2); };
         let toDateString = date => { return date.getFullYear() + "-" + pad2(date.getMonth()+1) + "-" + pad2(date.getDate()); };
         return (<div>
-            <p>Pick a UTC date for channel #{this.props.name}</p>
-            <input type="date" onChange={this.handleDateChange.bind(this)} min={toDateString(created)} max={toDateString(now)}/>
+            <input key={this.props.name} type="date" onChange={this.handleDateChange.bind(this)} min={toDateString(created)} max={toDateString(now)} />
         </div>);
     }
 }
@@ -104,7 +104,7 @@ class HistoryView extends React.Component {
                 return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
             };
             let nodes = this.state.data.map((m,i) => {
-                let header = <span>{datetimeFormatter(new Date(m.ts*1000))} {m.user}</span>;
+                let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} {m.user}</span>;
                 return (<li key={m.ts}><ReactMarkdown source={m.text} childBefore={header} /></li>);
             })
             return (<ul>{nodes}</ul>);

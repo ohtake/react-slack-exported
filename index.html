@@ -3,21 +3,43 @@
 <head>
 <title>Slack exported</title>
 <meta charset="UTF-8" />
+<style type="text/css">
+#channels ul {
+  margin: 0.4em 0;
+  padding: 0;
+}
+#channels ul li {
+  display: inline;
+  float: left;
+  margin: 0.1em 0.2em;
+}
+#channels ul li.active {
+  background-color: silver;
+}
+#date {
+  clear: both;
+}
+#history ul li {
+  margin: 0.1em 0.2em;
+  list-style-type: none;
+}
+#history ul li div span.header{
+  float: left;
+  padding-right: 0.2em;
+}
+#history ul li div p{
+  margin: 0;
+}
+</style>
 </head>
 
 <body>
 
 <h1>Slack exported</h1>
 
-<h2>Channels</h2>
+<h2>Pick a channel and UTC date</h2>
 
 <div id="channels"></div>
-
-<h2>Users</h2>
-
-<div id="users"></div>
-
-<h2>Date</h2>
 
 <div id="date"></div>
 
