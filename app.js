@@ -65,6 +65,7 @@ class Channels extends React.Component {
         let channel = this.state.data[$(e.target).data("index")];
         this.setState({activeChannel: channel.name})
         ReactDOM.render(React.createElement(DateSelector, channel), document.getElementById('date'));
+        ReactDOM.render(React.createElement(HistoryView, {}), document.getElementById('history'));
     }
     render() {
         if(this.state.message) {
@@ -99,16 +100,22 @@ class DateSelector extends React.Component {
 class HistoryView extends React.Component {
     constructor() {
         super();
-        this.state = {
-            message: "loading",
+        this.initialState = {
+            message: "Pick a UTC date",
             data: []
         };
-    }
-    componentDidMount() {
-        this.fetchHistory(this.props);
+        this.state = this.initialState;
     }
     componentWillReceiveProps(nextProps) {
-        this.fetchHistory(nextProps);
+        if (nextProps.channel) {
+            this.state = {
+                message: "loading",
+                data: []
+            };
+            this.fetchHistory(nextProps);
+        } else {
+            this.setState(this.initialState);
+        }
     }
     fetchHistory(props) {
         $.getJSON("slack_export/" + props.channel.name + "/" + props.date + ".json")
