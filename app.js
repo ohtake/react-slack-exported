@@ -130,7 +130,7 @@ class HistoryView extends React.Component {
             return (<div>{this.state.message}</div>);
         } else {
             let datetimeFormatter = dt => {
-                return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                return dt.toLocaleString();
             };
             let nodes = this.state.data.map((m,i) => {
                 let user = userResolver.find(m.user);
