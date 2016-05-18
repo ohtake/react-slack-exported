@@ -3,6 +3,37 @@ import ReactDOM from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import $ from 'jquery';
 
+class UserResolver {
+    constructor() {
+        this.users = [];
+        this.userMap = {};
+    }
+    find(userId) {
+        return this.userMap[userId];
+    }
+    replaceAll(message) {
+        let userRegex = /<@U[0-9A-Z]{8}>/;
+        let callback = match => {
+            return "@" + this.find(match.substring(2,11)).name;
+        }
+        return message.replace(userRegex, callback);
+    }
+    fetchUsers() {
+        $.getJSON("slack_export/users.json")
+        .done(data => {
+            this.users = data;
+            this.userMap = {};
+            for(let i=0; i<data.length; i++) {
+                let user = data[i];
+                this.userMap[user.id] = user;
+            }
+        })
+        .fail(err => {
+            console.error(err.status + " " + err.statusText);
+        });
+    }
+}
+
 class Channels extends React.Component {
     constructor() {
         super();
@@ -104,12 +135,14 @@ class HistoryView extends React.Component {
                 return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
             };
             let nodes = this.state.data.map((m,i) => {
-                let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} {m.user}</span>;
-                return (<li key={m.ts}><ReactMarkdown source={m.text} childBefore={header} /></li>);
+                let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} {userResolver.find(m.user).name}</span>;
+                return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} childBefore={header} /></li>);
             })
             return (<ul>{nodes}</ul>);
         }
     }
 }
 
+var userResolver = new UserResolver();
+userResolver.fetchUsers();
 ReactDOM.render(<Channels />, document.getElementById('channels'));
