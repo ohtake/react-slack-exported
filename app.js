@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactMarkdown from 'react-markdown';
+import Moment from 'moment-timezone';
 import $ from 'jquery';
 
 class UserResolver {
@@ -90,9 +91,12 @@ class DateSelector extends React.Component {
         let created = new Date(this.props.created*1000);
         let now = new Date();
         let pad2 = n => { return ("0"+n).slice(-2); };
-        let toDateString = date => { return date.getFullYear() + "-" + pad2(date.getMonth()+1) + "-" + pad2(date.getDate()); };
+        let toSlackDateString = date => {
+            let moment = Moment(date)
+            return moment.tz("America/Los_Angeles").format("YYYY-MM-DD");
+        };
         return (<div>
-            <input key={this.props.name} type="date" onChange={this.handleDateChange.bind(this)} min={toDateString(created)} max={toDateString(now)} />
+            <input key={this.props.name} type="date" onChange={this.handleDateChange.bind(this)} min={toSlackDateString(created)} max={toSlackDateString(now)} />
         </div>);
     }
 }
@@ -101,7 +105,7 @@ class HistoryView extends React.Component {
     constructor() {
         super();
         this.initialState = {
-            message: "Pick a UTC date",
+            message: "Pick a PST/PDT date",
             data: []
         };
         this.state = this.initialState;
