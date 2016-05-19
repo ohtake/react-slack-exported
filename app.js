@@ -13,7 +13,7 @@ class UserResolver {
         return this.userMap[userId];
     }
     replaceAll(message) {
-        let userRegex = /<@U[0-9A-Z]{8}>/;
+        let userRegex = /<@U[0-9A-Z]{8}(\|[-_A-Za-z0-9]+)?>/;
         let callback = match => {
             return "@" + this.find(match.substring(2,11)).name;
         }
