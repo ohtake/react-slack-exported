@@ -55,7 +55,7 @@ class Channels extends React.Component {
     constructor() {
         super();
         this.state = {
-            message: "loading",
+            message: "Loading",
             data: []
         };
     }
@@ -108,7 +108,6 @@ class DateSelector extends React.Component {
     render() {
         let created = new Date(this.props.created*1000);
         let now = new Date();
-        let pad2 = n => { return ("0"+n).slice(-2); };
         let toSlackDateString = date => {
             let moment = Moment(date)
             return moment.tz("America/Los_Angeles").format("YYYY-MM-DD");
@@ -123,7 +122,7 @@ class HistoryView extends React.Component {
     constructor() {
         super();
         this.initialState = {
-            message: "Pick a PST/PDT date",
+            message: "Pick a PST/PDT date (If your browser does not recognize type=date, please input a date in YYYY-MM-DD format)",
             data: []
         };
         this.state = this.initialState;
@@ -131,7 +130,7 @@ class HistoryView extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.channel) {
             this.state = {
-                message: "loading",
+                message: "Loading",
                 data: []
             };
             this.fetchHistory(nextProps);
