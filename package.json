@@ -6,6 +6,7 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "es6-promise": "3.2.1",
     "jquery": "2.2.3",
     "moment-timezone": "0.5.4",
     "react": "15.0.2",

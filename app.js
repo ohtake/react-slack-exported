@@ -2,7 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import Moment from 'moment-timezone';
+import Promise from 'es6-promise'; // For older browsers http://caniuse.com/#feat=promises
+import fetch from 'whatwg-fetch';
 import $ from 'jquery';
+
+function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+        return response;
+    } else {
+        let error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+    }
+}
+function parseJSON(response) {
+    return response.json();
+}
 
 class UserResolver {
     constructor() {
@@ -20,8 +35,10 @@ class UserResolver {
         return message.replace(userRegex, callback);
     }
     fetchUsers() {
-        $.getJSON("slack_export/users.json")
-        .done(data => {
+        window.fetch("slack_export/users.json")
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(data => {
             this.users = data;
             this.userMap = {};
             for(let i=0; i<data.length; i++) {
@@ -29,8 +46,8 @@ class UserResolver {
                 this.userMap[user.id] = user;
             }
         })
-        .fail(err => {
-            console.error(err.status + " " + err.statusText);
+        .catch(err => {
+            console.error(err);
         });
     }
 }
@@ -47,16 +64,18 @@ class Channels extends React.Component {
         this.fetchData();
     }
     fetchData() {
-        $.getJSON("slack_export/channels.json")
-        .done(data => {
+        window.fetch("slack_export/channels.json")
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(data => {
             this.setState({
                 message: "",
                 data: data
             });
         })
-        .fail(err => {
+        .catch(err => {
             this.setState({
-                message: err.status + " " + err.statusText,
+                message: err.toString(),
                 data: []
             });
         });
@@ -122,16 +141,18 @@ class HistoryView extends React.Component {
         }
     }
     fetchHistory(props) {
-        $.getJSON("slack_export/" + props.channel.name + "/" + props.date + ".json")
-        .done(data => {
+        window.fetch("slack_export/" + props.channel.name + "/" + props.date + ".json")
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(data => {
             this.setState({
                 message: "",
                 data: data
             });
         })
-        .fail(err => {
+        .catch(err => {
             this.setState({
-                message: err.status + " " + err.statusText,
+                message: err.toString(),
                 data: []
             });
         });
