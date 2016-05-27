@@ -4,7 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import Moment from 'moment-timezone';
 import Promise from 'es6-promise'; // For older browsers http://caniuse.com/#feat=promises
 import fetch from 'whatwg-fetch';
-import $ from 'jquery';
 
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
@@ -82,7 +81,7 @@ class Channels extends React.Component {
     }
     handleChannelSelect(e) {
         e.preventDefault();
-        let channel = this.state.data[$(e.target).data("index")];
+        let channel = this.state.data[e.target.getAttribute("data-index")];
         this.setState({activeChannel: channel.name})
         ReactDOM.render(React.createElement(DateSelector, channel), document.getElementById('date'));
         ReactDOM.render(React.createElement(HistoryView, {}), document.getElementById('history'));
