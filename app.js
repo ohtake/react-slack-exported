@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as RR from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import Moment from 'moment-timezone';
 import Promise from 'es6-promise'; // For older browsers http://caniuse.com/#feat=promises
@@ -16,6 +17,36 @@ function checkStatus(response) {
 }
 function parseJSON(response) {
     return response.json();
+}
+
+class ChannelResolver {
+    constructor() {
+        this.channels = [];
+        this.channelMap = {};
+    }
+    find(channelName) {
+        return this.channelMap[channelName];
+    }
+    listChannels() {
+        return this.channels;
+    }
+    fetchChannels(callback) {
+        window.fetch("slack_export/channels.json")
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(data => {
+            this.channels = data;
+            this.userMap = {};
+            for(let i=0; i<data.length; i++) {
+                let channel = data[i];
+                this.channelMap[channel.name] = channel;
+            }
+        }).then(()=> {
+            callback();
+        }).catch(err => {
+            console.error(err);
+        });
+    }
 }
 
 class UserResolver {
@@ -54,92 +85,63 @@ class UserResolver {
 class Channels extends React.Component {
     constructor() {
         super();
-        this.state = {
-            message: "Loading",
-            data: []
-        };
-    }
-    componentDidMount() {
-        this.fetchData();
-    }
-    fetchData() {
-        window.fetch("slack_export/channels.json")
-        .then(checkStatus)
-        .then(parseJSON)
-        .then(data => {
-            this.setState({
-                message: "",
-                data: data
-            });
-        })
-        .catch(err => {
-            this.setState({
-                message: err.toString(),
-                data: []
-            });
-        });
-    }
-    handleChannelSelect(e) {
-        e.preventDefault();
-        let channel = this.state.data[e.target.getAttribute("data-index")];
-        this.setState({activeChannel: channel.name})
-        ReactDOM.render(React.createElement(DateSelector, channel), document.getElementById('date'));
-        ReactDOM.render(React.createElement(HistoryView, {}), document.getElementById('history'));
     }
     render() {
-        if(this.state.message) {
-            return (<div>{this.state.message}</div>);
-        } else {
-            let nodes = this.state.data.map((c,i) => {
-              return (<li key={c.id} className={(c.name == this.state.activeChannel) ? "active" : ""}><a onClick={this.handleChannelSelect.bind(this)} href="#" data-index={i}>#{c.name}</a></li>);
-            })
-            return (<ul>{nodes}</ul>);
-        }
+        let nodes = channelResolver.listChannels().map(c => {
+            return (<li key={c.id}><RR.Link to={`/channel/${c.name}`} activeClassName="active">#{c.name}</RR.Link></li>);
+        });
+        return <div><h2>Channels</h2><ul id="channels">{nodes}</ul>{this.props.children}</div>;
     }
-};
+}
 
 class DateSelector extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
     }
+    componentWillReceiveProps(nextProps) {
+        this.refs.input.value = nextProps.params.date;
+    }
     handleDateChange(e) {
-        ReactDOM.render(React.createElement(HistoryView, {channel: this.props, date: e.target.value}), document.getElementById('history'));
+        let channel = channelResolver.find(this.props.params.channelName);
+        this.context.router.push(`/channel/${channel.name}/date/${e.target.value}`);
     }
     render() {
-        let created = new Date(this.props.created*1000);
+        let channel = channelResolver.find(this.props.params.channelName);
+        let created = new Date(channel.created*1000);
         let now = new Date();
         let toSlackDateString = date => {
             let moment = Moment(date)
             return moment.tz("America/Los_Angeles").format("YYYY-MM-DD");
         };
         return (<div>
-            <input key={this.props.name} type="date" onChange={this.handleDateChange.bind(this)} min={toSlackDateString(created)} max={toSlackDateString(now)} />
+            <h2>Date</h2>
+            <p>Pick a PST/PDT date (If your browser does not recognize type=date, please input a date in YYYY-MM-DD format)</p>
+            <input ref="input" type="date" onChange={this.handleDateChange.bind(this)} min={toSlackDateString(created)} max={toSlackDateString(now)} defaultValue={this.props.params.date} />
+            {this.props.children}
         </div>);
     }
 }
+DateSelector.contextTypes = {
+    router: React.PropTypes.object,
+};
 
 class HistoryView extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
         this.initialState = {
-            message: "Pick a PST/PDT date (If your browser does not recognize type=date, please input a date in YYYY-MM-DD format)",
-            data: []
+            message: "Loading...",
+            data: [],
         };
         this.state = this.initialState;
     }
+    componentDidMount() {
+        this.fetchHistory(this.props);
+    }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.channel) {
-            this.state = {
-                message: "Loading",
-                data: []
-            };
-            this.fetchHistory(nextProps);
-        } else {
-            this.setState(this.initialState);
-        }
+        this.fetchHistory(nextProps);
     }
     fetchHistory(props) {
-        window.fetch("slack_export/" + props.channel.name + "/" + props.date + ".json")
+        window.fetch("slack_export/" + props.params.channelName + "/" + props.params.date + ".json")
         .then(checkStatus)
         .then(parseJSON)
         .then(data => {
@@ -156,22 +158,29 @@ class HistoryView extends React.Component {
         });
     }
     render() {
-        if(this.state.message) {
-            return (<div>{this.state.message}</div>);
-        } else {
-            let datetimeFormatter = dt => {
-                return dt.toLocaleString();
-            };
-            let nodes = this.state.data.map((m,i) => {
-                let user = userResolver.find(m.user);
-                let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} <img src={user.profile.image_24} width="12" height="12"/>{user.name}</span>;
-                return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} softBreak="br" childBefore={header} /></li>);
-            })
-            return (<ul>{nodes}</ul>);
-        }
+        let datetimeFormatter = dt => {
+            return dt.toLocaleString();
+        };
+        let nodes = this.state.data.map((m,i) => {
+            let user = userResolver.find(m.user);
+            let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} <img src={user.profile.image_24} width="12" height="12"/>{user.name}</span>;
+            return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} softBreak="br" childBefore={header} /></li>);
+        })
+        return (<div><h2>History</h2><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
     }
 }
 
+var channelResolver = new ChannelResolver();
+channelResolver.fetchChannels(() => {
+    ReactDOM.render((
+      <RR.Router history={RR.hashHistory}>
+        <RR.Route path="/" component={Channels}>
+          <RR.Route path="/channel/:channelName" component={DateSelector}>
+            <RR.Route path="/channel/:channelName/date/:date" component={HistoryView}/>
+          </RR.Route>
+        </RR.Route>
+      </RR.Router>
+    ), document.getElementById('app'));
+});
 var userResolver = new UserResolver();
 userResolver.fetchUsers();
-ReactDOM.render(<Channels />, document.getElementById('channels'));

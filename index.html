@@ -4,31 +4,33 @@
 <title>Slack exported</title>
 <meta charset="UTF-8" />
 <style type="text/css">
-#channels ul {
+ul#channels {
   margin: 0.4em 0;
   padding: 0;
 }
-#channels ul li {
-  display: inline;
-  float: left;
+ul#channels li {
+  display: inline-block;
   margin: 0.1em 0.2em;
 }
-#channels ul li.active {
-  background-color: silver;
+ul#channels li a.active {
+  color: red;
 }
 h2 {
   clear: both;
 }
-#history ul li {
+ul#history {
+  padding: 0;
+}
+ul#history li {
   margin: 0.1em 0.2em;
   list-style-type: none;
 }
-#history ul li div span.header{
+ul#history li div span.header{
   float: left;
   padding-right: 0.2em;
 }
-#history ul li div p{
-  margin: 0;
+ul#history li div p{
+  margin: 0 1.5em 0.3em;
 }
 </style>
 </head>
@@ -37,15 +39,7 @@ h2 {
 
 <h1>Slack exported</h1>
 
-<h2>Channels</h2>
-
-<div id="channels"></div>
-
-<h2>History</h2>
-
-<div id="date"></div>
-
-<div id="history"></div>
+<div id="app">Loading channels</div>
 
 <script src="build.js"></script>
 
