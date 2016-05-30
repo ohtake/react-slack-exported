@@ -175,8 +175,8 @@ channelResolver.fetchChannels(() => {
     ReactDOM.render((
       <RR.Router history={RR.hashHistory}>
         <RR.Route path="/" component={Channels}>
-          <RR.Route path="/channel/:channelName" component={DateSelector}>
-            <RR.Route path="/channel/:channelName/date/:date" component={HistoryView}/>
+          <RR.Route path="channel/:channelName" component={DateSelector}>
+            <RR.Route path="date/:date" component={HistoryView}/>
           </RR.Route>
         </RR.Route>
       </RR.Router>
