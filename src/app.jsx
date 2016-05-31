@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as RR from 'react-router';
-import {ChannelResolver, UserResolver} from './resolver.js';
+import { Router, Route, hashHistory } from 'react-router';
+import { ChannelResolver, UserResolver } from './resolver.js';
 import * as C from './components.jsx';
 
 /* eslint-disable no-unused-vars */
@@ -11,28 +11,29 @@ import fetch from 'whatwg-fetch';
 /* eslint-enable */
 
 let channelResolver = new ChannelResolver();
-channelResolver.fetch(() => {
-    channelLoaded = true;
-    renderIfCompleted();
-});
 let userResolver = new UserResolver();
-userResolver.fetch(() => {
-    userLoaded = true;
-    renderIfCompleted();
-});
-
 let channelLoaded = false;
 let userLoaded = false;
+
 function renderIfCompleted() {
-    if (channelLoaded && userLoaded) {
-        ReactDOM.render((
-          <RR.Router history={RR.hashHistory}>
-            <RR.Route path="/" component={C.Channels} channelResolver={channelResolver}>
-              <RR.Route path="channel/:channelName" component={C.DateSelector} channelResolver={channelResolver}>
-                <RR.Route path="date/:date" component={C.HistoryView} userResolver={userResolver}/>
-              </RR.Route>
-            </RR.Route>
-          </RR.Router>
-        ), document.getElementById('app'));
-    }
+  if (channelLoaded && userLoaded) {
+    ReactDOM.render((
+      <Router history={hashHistory}>
+        <Route path="/" component={C.Channels} channelResolver={channelResolver}>
+          <Route path="channel/:channelName" component={C.DateSelector} channelResolver={channelResolver}>
+            <Route path="date/:date" component={C.HistoryView} userResolver={userResolver} />
+          </Route>
+        </Route>
+      </Router>
+    ), document.getElementById('app'));
+  }
 }
+
+channelResolver.fetch(() => {
+  channelLoaded = true;
+  renderIfCompleted();
+});
+userResolver.fetch(() => {
+  userLoaded = true;
+  renderIfCompleted();
+});

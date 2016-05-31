@@ -1,41 +1,41 @@
 module.exports = {
-    entry: ["./src/app.jsx"],
-    output: {
-        publicPath: "assets",
-        path: "assets",
-        filename: "bundle.js",
-    },
-    plugins: [
+  entry: ['./src/app.jsx'],
+  output: {
+    publicPath: 'assets',
+    path: 'assets',
+    filename: 'bundle.js',
+  },
+  plugins: [
+  ],
+  module: {
+    preLoaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'eslint',
+      },
     ],
-    module: {
-        preLoaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: 'eslint',
-            },
-        ],
-        loaders: [
-            {
-                test: /\.jsx$/,
-                exclude: /node_modules/,
-                loader: 'babel',
-                query: {
-                    presets: ['react', 'es2015'],
-                },
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel',
-                query: {
-                    presets: ['es2015'],
-                },
-            },
-            {
-                test: /\.json$/,
-                loader: 'json',
-            },
-        ],
-    },
+    loaders: [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['react', 'es2015'],
+        },
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015'],
+        },
+      },
+      {
+        test: /\.json$/,
+        loader: 'json',
+      },
+    ],
+  },
 };
