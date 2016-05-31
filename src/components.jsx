@@ -4,6 +4,12 @@ import ReactMarkdown from 'react-markdown';
 import Moment from 'moment-timezone';
 import * as util from './util.js';
 
+const propTypesRoute = {
+    children: React.PropTypes.object,
+    route: React.PropTypes.object,
+    params: React.PropTypes.object,
+};
+
 export class Channels extends React.Component {
     constructor() {
         super();
@@ -15,6 +21,7 @@ export class Channels extends React.Component {
         return <div><h2>Channels</h2><ul id="channels">{nodes}</ul>{this.props.children}</div>;
     }
 }
+Channels.propTypes = propTypesRoute;
 
 export class DateSelector extends React.Component {
     constructor() {
@@ -43,6 +50,7 @@ export class DateSelector extends React.Component {
         </div>);
     }
 }
+DateSelector.propTypes = propTypesRoute;
 DateSelector.contextTypes = {
     router: React.PropTypes.object,
 };
@@ -91,3 +99,4 @@ export class HistoryView extends React.Component {
         return (<div><h2>History</h2><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
     }
 }
+HistoryView.propTypes = propTypesRoute;

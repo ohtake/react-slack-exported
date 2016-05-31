@@ -3,7 +3,7 @@
     es6: true
     commonjs: true
     browser: true
-  extends: "eslint:recommended"
+  extends: ["eslint:recommended", "plugin:react/recommended"]
   installedESLint: true
   parserOptions: 
     ecmaFeatures: 
@@ -23,3 +23,4 @@
     no-trailing-spaces: 1
     key-spacing: 1
     space-before-blocks: 1
+    react/prop-types: 1
