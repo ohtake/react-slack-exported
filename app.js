@@ -61,7 +61,7 @@ class UserResolver {
         let userRegex = /<@U[0-9A-Z]{8}(\|[-_.A-Za-z0-9]+)?>/;
         let callback = match => {
             return "@" + this.find(match.substring(2,11)).name;
-        }
+        };
         return message.replace(userRegex, callback);
     }
     fetchUsers() {
@@ -95,7 +95,7 @@ class Channels extends React.Component {
 }
 
 class DateSelector extends React.Component {
-    constructor(props) {
+    constructor() {
         super();
     }
     componentWillReceiveProps(nextProps) {
@@ -110,7 +110,7 @@ class DateSelector extends React.Component {
         let created = new Date(channel.created*1000);
         let now = new Date();
         let toSlackDateString = date => {
-            let moment = Moment(date)
+            let moment = Moment(date);
             return moment.tz("America/Los_Angeles").format("YYYY-MM-DD");
         };
         return (<div>
@@ -126,7 +126,7 @@ DateSelector.contextTypes = {
 };
 
 class HistoryView extends React.Component {
-    constructor(props) {
+    constructor() {
         super();
         this.initialState = {
             message: "Loading...",
@@ -161,11 +161,11 @@ class HistoryView extends React.Component {
         let datetimeFormatter = dt => {
             return dt.toLocaleString();
         };
-        let nodes = this.state.data.map((m,i) => {
+        let nodes = this.state.data.map(m => {
             let user = userResolver.find(m.user);
             let header = <span className="header">{datetimeFormatter(new Date(m.ts*1000))} <img src={user.profile.image_24} width="12" height="12"/>{user.name}</span>;
             return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} softBreak="br" childBefore={header} /></li>);
-        })
+        });
         return (<div><h2>History</h2><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
     }
 }
