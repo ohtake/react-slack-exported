@@ -1,9 +1,11 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ["./app.js"],
+    entry: ["./src/app.jsx"],
     output: {
-        filename: "./build.js",
+        publicPath: "assets",
+        path: "assets",
+        filename: "bundle.js",
     },
     plugins: [
         new webpack.DefinePlugin({
