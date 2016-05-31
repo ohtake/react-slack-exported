@@ -1,26 +1,23 @@
 import * as util from './util.js';
 
-export class ChannelResolver {
+class ResolverBase {
     constructor() {
-        this.channels = [];
-        this.channelMap = {};
+        this.array = [];
+        this.map = {};
     }
-    find(channelName) {
-        return this.channelMap[channelName];
+    find(key) {
+        return this.map[key];
     }
-    listChannels() {
-        return this.channels;
-    }
-    fetchChannels(callback) {
-        window.fetch("slack_export/channels.json")
+    fetch(callback) {
+        window.fetch(this.filename)
         .then(util.checkStatus)
         .then(util.parseJSON)
         .then(data => {
-            this.channels = data;
-            this.userMap = {};
+            this.array = data;
+            this.map = {};
             for(let i=0; i<data.length; i++) {
-                let channel = data[i];
-                this.channelMap[channel.name] = channel;
+                let item = data[i];
+                this.map[this.keySelector(item)] = item;
             }
         }).then(()=> {
             callback();
@@ -30,13 +27,22 @@ export class ChannelResolver {
     }
 }
 
-export class UserResolver {
+export class ChannelResolver extends ResolverBase {
     constructor() {
-        this.users = [];
-        this.userMap = {};
+        super();
+        this.filename = "slack_export/channels.json";
+        this.keySelector = (item) => { return item.name; };
     }
-    find(userId) {
-        return this.userMap[userId];
+    listChannels() {
+        return this.array;
+    }
+}
+
+export class UserResolver extends ResolverBase {
+    constructor() {
+        super();
+        this.filename = "slack_export/users.json";
+        this.keySelector = (item) => { return item.id; };
     }
     replaceAll(message) {
         let userRegex = /<@U[0-9A-Z]{8}(\|[-_.A-Za-z0-9]+)?>/;
@@ -44,23 +50,6 @@ export class UserResolver {
             return "@" + this.find(match.substring(2,11)).name;
         };
         return message.replace(userRegex, callback);
-    }
-    fetchUsers(callback) {
-        window.fetch("slack_export/users.json")
-        .then(util.checkStatus)
-        .then(util.parseJSON)
-        .then(data => {
-            this.users = data;
-            this.userMap = {};
-            for(let i=0; i<data.length; i++) {
-                let user = data[i];
-                this.userMap[user.id] = user;
-            }
-        }).then(()=> {
-            callback();
-        }).catch(err => {
-            console.error(err);
-        });
     }
 }
 

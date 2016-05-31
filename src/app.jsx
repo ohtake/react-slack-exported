@@ -11,12 +11,12 @@ import fetch from 'whatwg-fetch';
 /* eslint-enable */
 
 let channelResolver = new ChannelResolver();
-channelResolver.fetchChannels(() => {
+channelResolver.fetch(() => {
     channelLoaded = true;
     renderIfCompleted();
 });
 let userResolver = new UserResolver();
-userResolver.fetchUsers(() => {
+userResolver.fetch(() => {
     userLoaded = true;
     renderIfCompleted();
 });
