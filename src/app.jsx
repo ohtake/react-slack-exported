@@ -13,7 +13,7 @@ function renderIfCompleted() {
   if (channelLoaded && userLoaded) {
     ReactDOM.render((
       <Router history={hashHistory}>
-        <Route path="/" component={C.Channels} channelResolver={channelResolver}>
+        <Route path="/" component={C.ChannelSelector} channelResolver={channelResolver}>
           <Route path="channel/:channelName" component={C.DateSelector} channelResolver={channelResolver}>
             <Route path="date/:date" component={C.HistoryView} userResolver={userResolver} />
           </Route>
