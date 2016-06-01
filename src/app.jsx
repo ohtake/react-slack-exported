@@ -4,12 +4,6 @@ import { Router, Route, hashHistory } from 'react-router';
 import { ChannelResolver, UserResolver } from './resolver.js';
 import * as C from './components.jsx';
 
-/* eslint-disable no-unused-vars */
-// Polyfills are not used but required
-import Promise from 'es6-promise'; // For older browsers http://caniuse.com/#feat=promises
-import fetch from 'whatwg-fetch';
-/* eslint-enable */
-
 let channelResolver = new ChannelResolver();
 let userResolver = new UserResolver();
 let channelLoaded = false;
