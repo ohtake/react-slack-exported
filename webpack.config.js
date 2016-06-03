@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   entry: [
     'babel-polyfill',
@@ -5,8 +7,8 @@ module.exports = {
     './src/app.jsx',
   ],
   output: {
-    publicPath: 'assets',
-    path: 'assets',
+    publicPath: '/assets/',
+    path: path.join(__dirname, 'assets'),
     filename: 'bundle.js',
   },
   plugins: [
@@ -15,14 +17,14 @@ module.exports = {
     preLoaders: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        include: path.join(__dirname, 'src'),
         loader: 'eslint',
       },
     ],
     loaders: [
       {
         test: /\.jsx$/,
-        exclude: /node_modules/,
+        include: path.join(__dirname, 'src'),
         loader: 'babel',
         query: {
           presets: ['react', 'es2015'],
@@ -30,13 +32,14 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: path.join(__dirname, 'src'),
         loader: 'babel',
         query: {
           presets: ['es2015'],
         },
       },
       {
+        // Required to build moment-timezone
         test: /\.json$/,
         loader: 'json',
       },
