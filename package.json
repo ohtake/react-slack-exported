@@ -11,6 +11,8 @@
     "react": "15.1.0",
     "react-dom": "15.1.0",
     "react-router": "2.4.1",
+    "material-ui": "0.15.0",
+    "react-tap-event-plugin": "1.0.0",
     "react-markdown": "2.2.0"
   },
   "peerDependencies": {

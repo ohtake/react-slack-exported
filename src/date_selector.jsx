@@ -1,31 +1,49 @@
 import React from 'react';
+import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment-timezone';
 import * as util from './util.js';
 
 export default class DateSelector extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
+
+    this.state = this.propsToState(props);
+
     this.handleDateChange = this.handleDateChange.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    this.refs.input.value = nextProps.params.date;
+    this.setState(this.propsToState(nextProps));
   }
-  handleDateChange(e) {
-    const channel = this.props.route.channelResolver.find(this.props.params.channelName);
-    this.context.router.push(`/channel/${channel.name}/date/${e.target.value}`);
+  propsToState(props) {
+    const channel = props.route.channelResolver.find(props.params.channelName);
+    const date = this.dateStringToDate(props.params.date);
+    return { channel, date };
+  }
+  dateStringToDate(str) {
+    if (! str) return null;
+    const date = moment(str);
+    return date.toDate();
+  }
+  handleDateChange(n, date) {
+    this.context.router.push(`/channel/${this.state.channel.name}/date/${moment(date).format('YYYY-MM-DD')}`);
   }
   render() {
-    const channel = this.props.route.channelResolver.find(this.props.params.channelName);
-    const created = new Date(channel.created * 1000);
+    const created = new Date(this.state.channel.created * 1000);
     const now = new Date();
-    const toSlackDateString = date => {
-      const m = moment(date);
-      return m.tz('America/Los_Angeles').format('YYYY-MM-DD');
+    const toSlackDate = date => {
+      const m = moment(date).tz('America/Los_Angeles');
+      return new Date(m.year(), m.month(), m.date());
     };
     return (<div>
       <h2>Date</h2>
-      <p>Pick a PST/PDT date (If your browser does not recognize type=date, please input a date in YYYY-MM-DD format)</p>
-      <input ref="input" type="date" onChange={this.handleDateChange} min={toSlackDateString(created)} max={toSlackDateString(now)} defaultValue={this.props.params.date} />
+      <DatePicker
+        ref="input"
+        floatingLabelText="PST/PDT date"
+        minDate={toSlackDate(created)}
+        maxDate={toSlackDate(now)}
+        onChange={this.handleDateChange}
+        value={this.state.date}
+      />
       {this.props.children}
     </div>);
   }
