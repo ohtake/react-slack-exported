@@ -42,7 +42,7 @@ class App extends React.Component {
   }
   handleRouterTo(e) {
     this.context.router.push(e.currentTarget.getAttribute('data-routerTo'));
-    this.setState({ menuOpened: false });
+    window.setTimeout(() => this.setState({ menuOpened: false }), 200);
   }
   render() {
     return (<div>
