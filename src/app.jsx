@@ -11,6 +11,8 @@ import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import * as svgIcons from 'material-ui/svg-icons';
+import IconButton from 'material-ui/IconButton';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -33,6 +35,9 @@ class App extends React.Component {
     this.handleLeftIconButtonTouchTap = this.handleLeftIconButtonTouchTap.bind(this);
     this.handleRequestChange = this.handleRequestChange.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleMenuPinned = this.handleMenuPinned.bind(this);
+    this.handleMenuClose = this.handleMenuClose.bind(this);
+    this.menuWidth = 250;
   }
   handleLeftIconButtonTouchTap(/* e */) {
     this.setState({ menuOpened: !this.state.menuOpened });
@@ -41,7 +46,14 @@ class App extends React.Component {
     this.setState({ menuOpened: open });
   }
   handleMenuClick() {
+    if (this.state.menuDocked) return;
     window.setTimeout(() => this.setState({ menuOpened: false }), 200);
+  }
+  handleMenuPinned() {
+    this.setState({ menuDocked: !this.state.menuDocked });
+  }
+  handleMenuClose() {
+    this.setState({ menuOpened: false });
   }
   render() {
     const theme = this.context.muiTheme;
@@ -49,12 +61,25 @@ class App extends React.Component {
       display: 'block',
       borderLeft: `8px solid ${theme.palette.primary1Color}`,
     };
-    return (<div>
+    return (<div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
       <AppBar
         title="Slack exported"
         onLeftIconButtonTouchTap={this.handleLeftIconButtonTouchTap}
       />
-      <Drawer open={this.state.menuOpened} docked={false} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu">
+      <Drawer open={this.state.menuOpened} docked={this.state.menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
+        <Toolbar>
+          <ToolbarGroup firstChild>
+            {/* Needs firstChild to align others to left */}
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <IconButton onClick={this.handleMenuPinned}>
+              {this.state.menuDocked ? <svgIcons.ActionTurnedIn /> : <svgIcons.ActionTurnedInNot />}
+            </IconButton>
+            <IconButton onClick={this.handleMenuClose}>
+              <svgIcons.NavigationClose />
+            </IconButton>
+          </ToolbarGroup>
+        </Toolbar>
         <List>
           <IndexLink to="/" onClick={this.handleMenuClick} activeStyle={activeStyle}>
             <ListItem primaryText="Home" leftIcon={<svgIcons.ActionHome />} />
