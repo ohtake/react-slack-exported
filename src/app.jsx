@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, Link, IndexLink, hashHistory } from 'react-router';
 import { ChannelResolver, UserResolver } from './resolver.js';
 import * as C from './components.jsx';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -32,7 +32,7 @@ class App extends React.Component {
     this.state = { menuOpened: false, menuDocked: false };
     this.handleLeftIconButtonTouchTap = this.handleLeftIconButtonTouchTap.bind(this);
     this.handleRequestChange = this.handleRequestChange.bind(this);
-    this.handleRouterTo = this.handleRouterTo.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
   handleLeftIconButtonTouchTap(/* e */) {
     this.setState({ menuOpened: !this.state.menuOpened });
@@ -40,23 +40,31 @@ class App extends React.Component {
   handleRequestChange(open /* , reason */) {
     this.setState({ menuOpened: open });
   }
-  handleRouterTo(e) {
-    this.context.router.push(e.currentTarget.getAttribute('data-routerTo'));
+  handleMenuClick() {
     window.setTimeout(() => this.setState({ menuOpened: false }), 200);
   }
   render() {
+    const theme = this.context.muiTheme;
+    const activeStyle = {
+      display: 'block',
+      borderLeft: `8px solid ${theme.palette.primary1Color}`,
+    };
     return (<div>
       <AppBar
         title="Slack exported"
         onLeftIconButtonTouchTap={this.handleLeftIconButtonTouchTap}
       />
-      <Drawer open={this.state.menuOpened} docked={false} onRequestChange={this.handleRequestChange} width={240}>
+      <Drawer open={this.state.menuOpened} docked={false} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu">
         <List>
-          <ListItem primaryText="Home" leftIcon={<svgIcons.ActionHome />} onTouchTap={this.handleRouterTo} data-routerTo={'/'} />
+          <IndexLink to="/" onClick={this.handleMenuClick} activeStyle={activeStyle}>
+            <ListItem primaryText="Home" leftIcon={<svgIcons.ActionHome />} />
+          </IndexLink>
           <Divider />
           <Subheader>Channels</Subheader>
           {this.props.route.channelResolver.listChannels().map(c =>
-            <ListItem primaryText={c.name} onTouchTap={this.handleRouterTo} data-routerTo={`/channel/${c.name}`} />
+            <Link to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+              <ListItem primaryText={c.name} />
+            </Link>
           )}
         </List>
       </Drawer>
@@ -69,6 +77,7 @@ class App extends React.Component {
 App.propTypes = util.propTypesRoute;
 App.contextTypes = {
   router: React.PropTypes.object,
+  muiTheme: React.PropTypes.object.isRequired,
 };
 
 function renderIfCompleted() {
