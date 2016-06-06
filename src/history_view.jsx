@@ -41,7 +41,7 @@ export default class HistoryView extends React.Component {
       let header = <span className="header">{datetimeFormatter(new Date(m.ts * 1000))} <img src={user.profile.image_24} alt="*" width="12" height="12" />{user.name}</span>;
       return (<li key={m.ts}><ReactMarkdown source={this.props.route.userResolver.replaceAll(m.text)} softBreak="br" childBefore={header} /></li>);
     });
-    return (<div><h2>History</h2><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
+    return (<div><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
   }
 }
 HistoryView.propTypes = util.propTypesRoute;

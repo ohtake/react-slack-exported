@@ -35,7 +35,7 @@ export default class DateSelector extends React.Component {
       return new Date(m.year(), m.month(), m.date());
     };
     return (<div>
-      <h2>Date</h2>
+      <p>{this.state.channel.name} channel</p>
       <DatePicker
         ref="input"
         floatingLabelText="PST/PDT date"
