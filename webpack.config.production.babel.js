@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const _ = require('lodash');
-const base = require('./webpack.config');
+import webpack from 'webpack';
+import _ from 'lodash';
+import base from './webpack.config.babel.js';
 
 const overrides = {
   plugins: [
@@ -19,4 +19,4 @@ const overrides = {
   ],
 };
 
-module.exports = _.merge(base, overrides);
+export default _.merge(base, overrides);

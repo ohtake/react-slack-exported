@@ -38,7 +38,7 @@
   "scripts": {
     "lint": "eslint src --color",
     "gen-summary": "node generate_channel_summary.js",
-    "build": "webpack --config webpack.config.production.js --progress --colors",
+    "build": "webpack --config webpack.config.production.babel.js --progress --colors",
     "start": "webpack-dev-server --progress --colors",
     "server": "http-server"
   }
