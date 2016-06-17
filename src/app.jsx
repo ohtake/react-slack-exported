@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, Link, IndexLink, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, Link, IndexLink, useRouterHistory } from 'react-router';
+import { createHashHistory } from 'history';
 import { ChannelResolver, UserResolver } from './resolver.js';
 import * as C from './components.jsx';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -117,7 +118,7 @@ function renderIfCompleted() {
     stylesheet.insertRule(`a { color: ${theme.palette.primary2Color}; }`, stylesheet.cssRules.length);
     ReactDOM.render((
       <MuiThemeProvider muiTheme={theme}>
-        <Router history={hashHistory}>
+        <Router history={useRouterHistory(createHashHistory)({ queryKey: false })}>
           <Route path="/" component={App} channelResolver={channelResolver}>
             <IndexRoute component={C.ChannelSelector} channelResolver={channelResolver} />
             <Route path="channel/:channelName" component={C.DateSelector} channelResolver={channelResolver}>
