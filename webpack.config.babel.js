@@ -11,6 +11,7 @@ export default {
     path: path.join(__dirname, 'assets'),
     filename: 'bundle.js',
   },
+  devtool: 'source-map',
   plugins: [
   ],
   module: {
