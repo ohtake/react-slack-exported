@@ -59,7 +59,7 @@ class App extends React.Component {
     const theme = this.context.muiTheme;
     const activeStyle = {
       display: 'block',
-      borderLeft: `8px solid ${theme.palette.primary1Color}`,
+      borderLeft: `${theme.spacing.desktopGutterMini}px solid ${theme.palette.primary1Color}`,
     };
     return (<div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
       <AppBar
@@ -107,8 +107,16 @@ App.contextTypes = {
 
 function renderIfCompleted() {
   if (channelLoaded && userLoaded) {
+    const theme = getMuiTheme();
+    document.body.style.color = theme.palette.textColor;
+    document.body.style.backgroundColor = theme.palette.canvasColor;
+    document.body.style.fontFamily = theme.fontFamily;
+    const elStyle = document.createElement('style');
+    document.head.appendChild(elStyle);
+    const stylesheet = elStyle.sheet;
+    stylesheet.insertRule(`a { color: ${theme.palette.primary2Color}; }`, stylesheet.cssRules.length);
     ReactDOM.render((
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <MuiThemeProvider muiTheme={theme}>
         <Router history={hashHistory}>
           <Route path="/" component={App} channelResolver={channelResolver}>
             <IndexRoute component={C.ChannelSelector} channelResolver={channelResolver} />
