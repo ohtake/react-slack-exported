@@ -8,7 +8,7 @@ export default {
   ],
   output: {
     publicPath: '/assets/',
-    path: path.join(__dirname, 'assets'),
+    path: path.resolve('assets'),
     filename: 'bundle.js',
   },
   devtool: 'source-map',
@@ -18,14 +18,14 @@ export default {
     preLoaders: [
       {
         test: /\.jsx?$/,
-        include: path.join(__dirname, 'src'),
+        include: path.resolve('src'),
         loader: 'eslint',
       },
     ],
     loaders: [
       {
         test: /\.jsx$/,
-        include: path.join(__dirname, 'src'),
+        include: path.resolve('src'),
         loader: 'babel',
         query: {
           presets: ['react', 'es2015'],
@@ -33,7 +33,7 @@ export default {
       },
       {
         test: /\.js$/,
-        include: path.join(__dirname, 'src'),
+        include: path.resolve('src'),
         loader: 'babel',
         query: {
           presets: ['es2015'],
