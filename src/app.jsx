@@ -88,7 +88,7 @@ class App extends React.Component {
           <Divider />
           <Subheader>Channels</Subheader>
           {this.props.route.channelResolver.listChannels().map(c =>
-            <Link to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+            <Link key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
               <ListItem primaryText={c.name} />
             </Link>
           )}
