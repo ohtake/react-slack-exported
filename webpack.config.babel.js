@@ -1,4 +1,7 @@
+import webpack from 'webpack';
 import path from 'path';
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
   entry: [
@@ -13,6 +16,20 @@ export default {
   },
   devtool: 'source-map',
   plugins: [
+    ...(isProduction ? [
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        },
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false,
+        },
+      }),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.optimize.DedupePlugin(),
+    ] : []),
   ],
   module: {
     preLoaders: [

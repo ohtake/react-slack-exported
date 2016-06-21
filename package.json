@@ -19,6 +19,7 @@
   "peerDependencies": {
   },
   "devDependencies": {
+    "cross-env": "1.0.8",
     "lodash": "4.13.1",
     "webpack": "1.13.1",
     "babel-loader": "6.2.4",
@@ -38,7 +39,7 @@
   "scripts": {
     "lint": "eslint src --color",
     "gen-summary": "node generate_channel_summary.js",
-    "build": "webpack --config webpack.config.production.babel.js --progress --colors",
+    "build": "cross-env NODE_ENV=production webpack --progress --colors",
     "start": "webpack-dev-server --progress --colors",
     "server": "http-server"
   }
