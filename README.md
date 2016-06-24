@@ -29,7 +29,7 @@ I recommend [Visual Studio Code](https://code.visualstudio.com/) and [ESLint ext
 git checkout -B gh-pages
 npm run-script gen-summary
 npm run-script build
-git add -f build.js slack_export
+git add -f assets slack_export
 git commit -m "Build"
 git push origin gh-pages -f
 git checkout -
