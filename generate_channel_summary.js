@@ -1,8 +1,8 @@
 // Read 'slack_export/{channel_name}/*.json' and
 // emit number of messages for each day to 'assets/channel_summary/{channel_name}.json'.
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 function listChannelsSync() {
   const filenames = fs.readdirSync('slack_export');
