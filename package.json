@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "author": "",
-  "license": "",
+  "license": "ISC",
   "main": "src/app.jsx",
   "dependencies": {
     "babel-polyfill": "6.9.1",
