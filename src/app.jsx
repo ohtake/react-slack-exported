@@ -11,7 +11,10 @@ import Drawer from 'material-ui/Drawer';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
-import * as svgIcons from 'material-ui/svg-icons';
+import ActionHome from 'material-ui/svg-icons/action/home';
+import ActionTurnedIn from 'material-ui/svg-icons/action/turned-in';
+import ActionTurnedInNot from 'material-ui/svg-icons/action/turned-in-not';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 
@@ -74,16 +77,16 @@ class App extends React.Component {
           </ToolbarGroup>
           <ToolbarGroup>
             <IconButton onClick={this.handleMenuPinned}>
-              {this.state.menuDocked ? <svgIcons.ActionTurnedIn /> : <svgIcons.ActionTurnedInNot />}
+              {this.state.menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
             </IconButton>
             <IconButton onClick={this.handleMenuClose}>
-              <svgIcons.NavigationClose />
+              <NavigationClose />
             </IconButton>
           </ToolbarGroup>
         </Toolbar>
         <List>
           <IndexLink to="/" onClick={this.handleMenuClick} activeStyle={activeStyle}>
-            <ListItem primaryText="Home" leftIcon={<svgIcons.ActionHome />} />
+            <ListItem primaryText="Home" leftIcon={<ActionHome />} />
           </IndexLink>
           <Divider />
           <Subheader>Channels</Subheader>
