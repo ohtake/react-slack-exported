@@ -17,7 +17,7 @@ I have tested this application with [export option for Free plan](https://get.sl
 
 Install [Node.js and npm](https://nodejs.org/en/download/). Execute `npm install` to install dependencies.
 
-Run `npm run-script gen-summary` to create intermediate data.
+Run `npm run-script build:summary` to create intermediate data.
 
 Run `npm start`. Now you can visit http://localhost:8080/ to view the application.
 
@@ -27,7 +27,6 @@ I recommend [Visual Studio Code](https://code.visualstudio.com/) and [ESLint ext
 
 ```bash
 git checkout -B gh-pages
-npm run-script gen-summary
 npm run-script build
 git add -f assets slack_export
 git commit -m "Build"

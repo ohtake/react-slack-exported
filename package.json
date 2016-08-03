@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "cross-env": "2.0.0",
+    "npm-run-all": "2.3.0",
     "babel-cli": "6.11.4",
     "webpack": "1.13.1",
     "babel-loader": "6.2.4",
@@ -39,8 +40,9 @@
   },
   "scripts": {
     "lint": "eslint src/**/* webpack.config.babel.js --color",
-    "gen-summary": "babel-node generate_channel_summary.js",
-    "build": "cross-env NODE_ENV=production webpack --progress --colors",
+    "build": "npm-run-all -l -p build:*",
+    "build:js": "cross-env NODE_ENV=production webpack --progress --colors",
+    "build:summary": "babel-node generate_channel_summary.js",
     "start": "webpack-dev-server --progress --colors",
     "server": "http-server"
   }
