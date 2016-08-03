@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+
 import * as util from './util.js';
 
 export default class HistoryView extends React.Component {

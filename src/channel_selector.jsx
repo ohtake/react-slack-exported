@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
+
 import * as util from './util.js';
 
 const ChannelSelector = (props) => {

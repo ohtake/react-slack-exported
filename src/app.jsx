@@ -2,30 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, Link, IndexLink, useRouterHistory } from 'react-router';
 import { createHashHistory } from 'history';
-import { ChannelResolver, UserResolver } from './resolver.js';
-import * as C from './components.jsx';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import AppBar from 'material-ui/AppBar';
+import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import { List, ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+
 import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionTurnedIn from 'material-ui/svg-icons/action/turned-in';
 import ActionTurnedInNot from 'material-ui/svg-icons/action/turned-in-not';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import { ChannelResolver, UserResolver } from './resolver.js';
+import * as C from './components.jsx';
+import * as util from './util.js';
 
 // Needed for onTouchTap
 // Check this repo:
 // https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
-
-import * as util from './util.js';
 
 let channelResolver = new ChannelResolver();
 let userResolver = new UserResolver();

@@ -24,7 +24,7 @@ class ResolverBase {
       callback();
     })
     .catch(err => {
-      console.error(err);
+      throw new Error(err);
     });
   }
 }

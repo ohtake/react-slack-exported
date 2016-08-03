@@ -2,6 +2,7 @@ import React from 'react';
 import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import moment from 'moment-timezone';
+
 import * as util from './util.js';
 
 export default class DateSelector extends React.Component {
@@ -37,19 +38,19 @@ export default class DateSelector extends React.Component {
     });
   }
   dateStringToDate(str) {
-    if (! str) return null;
+    if (!str) return null;
     const date = moment(str);
     return date.toDate();
   }
   handleHeatmapClick(value) {
-    if (! value) return;
+    if (!value) return;
     this.context.router.push(`/channel/${this.state.channel.name}/date/${value.date}`);
   }
   handleDateChange(n, date) {
     this.context.router.push(`/channel/${this.state.channel.name}/date/${moment(date).format('YYYY-MM-DD')}`);
   }
   classForValue(value) {
-    if (! value || value.count === 0) {
+    if (!value || value.count === 0) {
       return 'velocity-0';
     } else if (value.count < this.state.maxComments / 8) {
       return 'velocity-1';
@@ -61,7 +62,7 @@ export default class DateSelector extends React.Component {
     return 'velocity-4';
   }
   render() {
-    if (! this.state || ! this.state.channel) {
+    if (!this.state || !this.state.channel) {
       return <div>Loading {this.props.params.channelName} channel info.</div>;
     }
     let numDays = (this.state.maxDate - this.state.minDate) / (24 * 60 * 60 * 1000);
@@ -78,7 +79,6 @@ export default class DateSelector extends React.Component {
         />
       </div>
       <DatePicker
-        ref="input"
         floatingLabelText="PST/PDT date"
         minDate={this.state.minDate}
         maxDate={this.state.maxDate}
