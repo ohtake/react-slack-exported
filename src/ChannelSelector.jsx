@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 import FlatButton from 'material-ui/FlatButton';
 
 import * as util from './util.js';
