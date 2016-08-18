@@ -8,8 +8,8 @@ class ResolverBase {
   find(key) {
     return this.map[key];
   }
-  fetch(callback) {
-    window.fetch(this.filename)
+  fetch() {
+    return window.fetch(this.filename)
     .then(util.checkStatus)
     .then(util.parseJSON)
     .then(data => {
@@ -19,12 +19,6 @@ class ResolverBase {
         const item = data[i];
         this.map[this.keySelector(item)] = item;
       }
-    })
-    .then(() => {
-      callback();
-    })
-    .catch(err => {
-      throw new Error(err);
     });
   }
 }
