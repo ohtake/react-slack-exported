@@ -9,7 +9,7 @@ export default {
   entry: [
     'babel-polyfill',
     'whatwg-fetch',
-    './src/app.jsx',
+    './src/index.jsx',
   ],
   output: {
     publicPath: '/assets/',

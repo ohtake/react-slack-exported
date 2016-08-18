@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "main": "src/app.jsx",
+  "main": "src/index.jsx",
   "dependencies": {
     "babel-polyfill": "6.13.0",
     "moment-timezone": "0.5.5",
