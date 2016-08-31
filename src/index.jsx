@@ -21,8 +21,8 @@ import HistoryView from './HistoryView.jsx';
 // https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
-let channelResolver = new ChannelResolver();
-let userResolver = new UserResolver();
+const channelResolver = new ChannelResolver();
+const userResolver = new UserResolver();
 
 Promise.all([channelResolver.fetch(), userResolver.fetch()])
 .then(() => {

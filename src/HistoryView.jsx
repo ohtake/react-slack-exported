@@ -37,9 +37,9 @@ export default class HistoryView extends React.Component {
   }
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();
-    let nodes = this.state.data.map(m => {
+    const nodes = this.state.data.map(m => {
       const user = this.props.route.userResolver.find(m.user);
-      let header = (<span className="header">
+      const header = (<span className="header">
         {datetimeFormatter(new Date(m.ts * 1000))}
         {user ? <span> <img src={user.profile.image_24} alt="*" width="12" height="12" />{user.name}</span> : null}
         {m.bot_id ? <span> (BOT) {m.bot_id}</span> : null}
