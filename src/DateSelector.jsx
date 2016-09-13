@@ -6,6 +6,11 @@ import moment from 'moment-timezone';
 import * as util from './util.js';
 
 export default class DateSelector extends React.Component {
+  static dateStringToDate(str) {
+    if (!str) return null;
+    const date = moment(str);
+    return date.toDate();
+  }
   constructor(props) {
     super();
 
@@ -20,11 +25,11 @@ export default class DateSelector extends React.Component {
   }
   propsToState(props) {
     const channel = props.route.channelResolver.find(props.params.channelName);
-    const date = this.dateStringToDate(props.params.date);
+    const date = DateSelector.dateStringToDate(props.params.date);
     window.fetch(`assets/channel_summary/${channel.name}.json`)
     .then(util.checkStatus)
     .then(util.parseJSON)
-    .then(data => {
+    .then((data) => {
       const minDate = data.counts.reduce((prevValue, currentValue) =>
         ((prevValue && prevValue < currentValue.date) ? prevValue : currentValue.date)
       , null);
@@ -34,13 +39,8 @@ export default class DateSelector extends React.Component {
       const maxComments = data.counts.reduce((prevValue, currentValue) =>
         ((prevValue > currentValue.count) ? prevValue : currentValue.count)
       , 0);
-      this.setState({ channel, minDate: this.dateStringToDate(minDate), maxDate: this.dateStringToDate(maxDate), date, counts: data.counts, maxComments });
+      this.setState({ channel, minDate: DateSelector.dateStringToDate(minDate), maxDate: DateSelector.dateStringToDate(maxDate), date, counts: data.counts, maxComments });
     });
-  }
-  dateStringToDate(str) {
-    if (!str) return null;
-    const date = moment(str);
-    return date.toDate();
   }
   handleHeatmapClick(value) {
     if (!value) return;

@@ -12,13 +12,12 @@ class ResolverBase {
     return window.fetch(this.filename)
     .then(util.checkStatus)
     .then(util.parseJSON)
-    .then(data => {
+    .then((data) => {
       this.array = data;
       this.map = {};
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i];
+      data.forEach((item) => {
         this.map[this.keySelector(item)] = item;
-      }
+      });
     });
   }
 }

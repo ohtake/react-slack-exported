@@ -22,13 +22,13 @@ export default class HistoryView extends React.Component {
     window.fetch(`slack_export/${props.params.channelName}/${props.params.date}.json`)
     .then(util.checkStatus)
     .then(util.parseJSON)
-    .then(data => {
+    .then((data) => {
       this.setState({
         message: '',
         data,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       this.setState({
         message: err.toString(),
         data: [],
@@ -37,7 +37,7 @@ export default class HistoryView extends React.Component {
   }
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();
-    const nodes = this.state.data.map(m => {
+    const nodes = this.state.data.map((m) => {
       const user = this.props.route.userResolver.find(m.user);
       const header = (<span className="header">
         {datetimeFormatter(new Date(m.ts * 1000))}
