@@ -3,10 +3,10 @@ import * as util from './util.js';
 class ResolverBase {
   constructor() {
     this.array = [];
-    this.map = {};
+    this.map = new Map();
   }
   find(key) {
-    return this.map[key];
+    return this.map.get(key);
   }
   fetch() {
     return window.fetch(this.filename)
@@ -14,9 +14,9 @@ class ResolverBase {
     .then(util.parseJSON)
     .then((data) => {
       this.array = data;
-      this.map = {};
+      this.map.clear();
       data.forEach((item) => {
-        this.map[this.keySelector(item)] = item;
+        this.map.set(this.keySelector(item), item);
       });
     });
   }
