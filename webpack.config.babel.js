@@ -16,6 +16,9 @@ export default {
     path: path.resolve('assets'),
     filename: 'bundle.js',
   },
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+  },
   devtool: 'source-map',
   plugins: [
     ...(isProduction ? [

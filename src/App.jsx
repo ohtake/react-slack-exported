@@ -15,7 +15,7 @@ import ActionTurnedInNot from 'material-ui/svg-icons/action/turned-in-not';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 
-import * as util from './util.js';
+import * as util from './util';
 
 export default class App extends React.Component {
   constructor() {

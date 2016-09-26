@@ -3,7 +3,7 @@ import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import moment from 'moment-timezone';
 
-import * as util from './util.js';
+import * as util from './util';
 
 export default class DateSelector extends React.Component {
   static dateStringToDate(str) {

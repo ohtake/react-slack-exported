@@ -10,11 +10,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import { ChannelResolver, UserResolver } from './resolver.js';
-import App from './App.jsx';
-import ChannelSelector from './ChannelSelector.jsx';
-import DateSelector from './DateSelector.jsx';
-import HistoryView from './HistoryView.jsx';
+import { ChannelResolver, UserResolver } from './resolver';
+import App from './App';
+import ChannelSelector from './ChannelSelector';
+import DateSelector from './DateSelector';
+import HistoryView from './HistoryView';
 
 // Needed for onTouchTap
 // Check this repo:

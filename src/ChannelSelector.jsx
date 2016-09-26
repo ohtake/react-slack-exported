@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'react-router/lib/Link';
 import FlatButton from 'material-ui/FlatButton';
 
-import * as util from './util.js';
+import * as util from './util';
 
 const ChannelSelector = (props) => {
   const nodes = props.route.channelResolver.listChannels().map(c =>
