@@ -51,6 +51,9 @@ export default {
         loader: 'babel',
         query: {
           presets: ['react', 'es2015'],
+          plugins: [
+            ['transform-react-remove-prop-types', { mode: 'wrap' }],
+          ],
         },
       },
       {
