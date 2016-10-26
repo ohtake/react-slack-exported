@@ -21,8 +21,6 @@ Run `npm run-script build:summary` to create intermediate data.
 
 Run `npm start`. Now you can visit `http://localhost:8080/` to view the application.
 
-I recommend [Visual Studio Code](https://code.visualstudio.com/) and [ESLint extention](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to edit source code.
-
 ## Publish
 
 ```bash
