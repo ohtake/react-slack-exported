@@ -8,7 +8,7 @@ const ChannelSelector = (props) => {
   const nodes = props.route.channelResolver.listChannels().map(c =>
     <Link key={c.name} to={`/channel/${c.name}`}>
       <FlatButton key={c.id} primary={c.name === props.params.channelName}>#{c.name}</FlatButton>
-    </Link>
+    </Link>,
   );
   return <div><h2>Channels</h2><div>{nodes}</div>{props.children}</div>;
 };

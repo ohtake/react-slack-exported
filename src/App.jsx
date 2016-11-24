@@ -78,7 +78,7 @@ export default class App extends React.Component {
           {this.props.route.channelResolver.listChannels().map(c =>
             <Link key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
               <ListItem primaryText={c.name} />
-            </Link>
+            </Link>,
           )}
         </List>
       </Drawer>
