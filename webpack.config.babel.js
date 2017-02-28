@@ -17,7 +17,7 @@ export default {
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   devtool: 'source-map',
   plugins: [
@@ -28,46 +28,48 @@ export default {
         },
       }),
       new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-        },
+        sourceMap: true,
       }),
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.optimize.DedupePlugin(),
+      new webpack.LoaderOptionsPlugin(),
     ] : []),
   ],
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         include: path.resolve('src'),
-        loader: 'eslint',
+        loader: 'eslint-loader',
+        enforce: 'pre',
       },
-    ],
-    loaders: [
       {
         test: /\.jsx$/,
         include: path.resolve('src'),
-        loader: 'babel',
-        query: {
-          presets: ['react', 'es2015'],
-          plugins: [
-            ['transform-react-remove-prop-types', { mode: 'wrap' }],
-          ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'es2015'],
+            plugins: [
+              ['transform-react-remove-prop-types', { mode: 'wrap' }],
+            ],
+          },
         },
       },
       {
         test: /\.js$/,
         include: path.resolve('src'),
-        loader: 'babel',
-        query: {
-          presets: ['es2015'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015'],
+          },
         },
       },
       {
         // Required to build moment-timezone
         test: /\.json$/,
-        loader: 'json',
+        use: {
+          loader: 'json-loader',
+        },
       },
     ],
   },
