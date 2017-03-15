@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IndexRoute from 'react-router/lib/IndexRoute';
-import Route from 'react-router/lib/Route';
-import Router from 'react-router/lib/Router';
-import hashHistory from 'react-router/lib/hashHistory';
+import HashRouter from 'react-router-dom/HashRouter';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -11,9 +8,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import { ChannelResolver, UserResolver } from './resolver';
 import App from './App';
-import ChannelSelector from './ChannelSelector';
-import DateSelector from './DateSelector';
-import HistoryView from './HistoryView';
 
 // Needed for onTouchTap
 // Check this repo:
@@ -35,14 +29,9 @@ Promise.all([channelResolver.fetch(), userResolver.fetch()])
   stylesheet.insertRule(`a { color: ${theme.palette.primary2Color}; }`, stylesheet.cssRules.length);
   ReactDOM.render((
     <MuiThemeProvider muiTheme={theme}>
-      <Router history={hashHistory}>
-        <Route path="/" component={App} channelResolver={channelResolver}>
-          <IndexRoute component={ChannelSelector} channelResolver={channelResolver} />
-          <Route path="channel/:channelName" component={DateSelector} channelResolver={channelResolver}>
-            <Route path="date/:date" component={HistoryView} userResolver={userResolver} />
-          </Route>
-        </Route>
-      </Router>
+      <HashRouter>
+        <App channelResolver={channelResolver} userResolver={userResolver} />
+      </HashRouter>
     </MuiThemeProvider>
   ), document.getElementById('app'));
 });

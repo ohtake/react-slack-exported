@@ -1,6 +1,6 @@
 import React from 'react';
-import IndexLink from 'react-router/lib/IndexLink';
-import Link from 'react-router/lib/Link';
+import NavLink from 'react-router-dom/NavLink';
+import Route from 'react-router-dom/Route';
 
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
@@ -15,7 +15,10 @@ import ActionTurnedInNot from 'material-ui/svg-icons/action/turned-in-not';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 
-import * as util from './util';
+import ChannelSelector from './ChannelSelector';
+import DateSelector from './DateSelector';
+import HistoryView from './HistoryView';
+import { ChannelResolver, UserResolver } from './resolver';
 
 export default class App extends React.Component {
   constructor() {
@@ -27,6 +30,12 @@ export default class App extends React.Component {
     this.handleMenuPinned = this.handleMenuPinned.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
     this.menuWidth = 250;
+  }
+  getChildContext() {
+    return {
+      channelResolver: this.props.channelResolver,
+      userResolver: this.props.userResolver,
+    };
   }
   handleLeftIconButtonTouchTap(/* e */) {
     this.setState({ menuOpened: !this.state.menuOpened });
@@ -70,26 +79,34 @@ export default class App extends React.Component {
           </ToolbarGroup>
         </Toolbar>
         <List>
-          <IndexLink to="/" onClick={this.handleMenuClick} activeStyle={activeStyle}>
+          <NavLink to="/" onClick={this.handleMenuClick} exact activeStyle={activeStyle}>
             <ListItem primaryText="Home" leftIcon={<ActionHome />} />
-          </IndexLink>
+          </NavLink>
           <Divider />
           <Subheader>Channels</Subheader>
-          {this.props.route.channelResolver.listChannels().map(c =>
-            <Link key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+          {this.props.channelResolver.listChannels().map(c =>
+            <NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
               <ListItem primaryText={c.name} />
-            </Link>,
+            </NavLink>,
           )}
         </List>
       </Drawer>
       <div style={{ padding: '8px' }}>
-        {this.props.children}
+        <Route path="/" component={ChannelSelector} />
+        <Route path="/channel/:channelName" component={DateSelector} />
+        <Route path="/channel/:channelName/date/:date" component={HistoryView} />
       </div>
     </div>);
   }
 }
-App.propTypes = util.propTypesRoute;
+App.propTypes = {
+  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
+  userResolver: React.PropTypes.instanceOf(UserResolver).isRequired,
+};
 App.contextTypes = {
-  router: React.PropTypes.object,
   muiTheme: React.PropTypes.object.isRequired,
+};
+App.childContextTypes = {
+  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
+  userResolver: React.PropTypes.instanceOf(UserResolver).isRequired,
 };

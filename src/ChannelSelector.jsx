@@ -1,17 +1,26 @@
 import React from 'react';
-import Link from 'react-router/lib/Link';
+import HashRouter from 'react-router-dom/HashRouter';
+import Link from 'react-router-dom/Link';
 import FlatButton from 'material-ui/FlatButton';
 
-import * as util from './util';
+import { ChannelResolver } from './resolver';
 
-const ChannelSelector = (props) => {
-  const nodes = props.route.channelResolver.listChannels().map(c =>
-    <Link key={c.name} to={`/channel/${c.name}`}>
-      <FlatButton key={c.id} primary={c.name === props.params.channelName}>#{c.name}</FlatButton>
-    </Link>,
+const ChannelSelector = (props, context) => {
+  const nodes = context.channelResolver.listChannels().map((c) => {
+    const path = `/channel/${c.name}`;
+    const currentPath = context.router.route.location.pathname;
+    return (<Link key={c.name} to={path}>
+      <FlatButton key={c.id} primary={currentPath === path || currentPath.indexOf(`${path}/`) === 0}>#{c.name}</FlatButton>
+    </Link>);
+  },
   );
-  return <div><h2>Channels</h2><div>{nodes}</div>{props.children}</div>;
+  return <div><h2>Channels</h2><div>{nodes}</div></div>;
 };
-ChannelSelector.propTypes = util.propTypesRoute;
+ChannelSelector.propTypes = {
+};
+ChannelSelector.contextTypes = {
+  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
+  router: React.PropTypes.shape(HashRouter.propTypes).isRequired,
+};
 
 export default ChannelSelector;

@@ -1,8 +1,11 @@
 import React from 'react';
+import HashRouter from 'react-router-dom/HashRouter';
+
 import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import moment from 'moment-timezone';
 
+import { ChannelResolver } from './resolver';
 import * as util from './util';
 
 export default class DateSelector extends React.Component {
@@ -11,21 +14,21 @@ export default class DateSelector extends React.Component {
     const date = moment(str);
     return date.toDate();
   }
-  constructor(props) {
+  constructor(props, context) {
     super();
 
-    this.propsToState(props);
+    this.propsToState(props, context);
 
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleHeatmapClick = this.handleHeatmapClick.bind(this);
     this.classForValue = this.classForValue.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    this.propsToState(nextProps);
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.propsToState(nextProps, nextContext);
   }
-  propsToState(props) {
-    const channel = props.route.channelResolver.find(props.params.channelName);
-    const date = DateSelector.dateStringToDate(props.params.date);
+  propsToState(props, context) {
+    const channel = context.channelResolver.find(props.match.params.channelName);
+    const date = DateSelector.dateStringToDate(props.match.params.date);
     window.fetch(`assets/channel_summary/${channel.name}.json`)
     .then(util.checkStatus)
     .then(util.parseJSON)
@@ -44,10 +47,10 @@ export default class DateSelector extends React.Component {
   }
   handleHeatmapClick(value) {
     if (!value) return;
-    this.context.router.push(`/channel/${this.state.channel.name}/date/${value.date}`);
+    this.context.router.history.push(`/channel/${this.state.channel.name}/date/${value.date}`);
   }
   handleDateChange(n, date) {
-    this.context.router.push(`/channel/${this.state.channel.name}/date/${moment(date).format('YYYY-MM-DD')}`);
+    this.context.router.history.push(`/channel/${this.state.channel.name}/date/${moment(date).format('YYYY-MM-DD')}`);
   }
   classForValue(value) {
     if (!value || value.count === 0) {
@@ -63,7 +66,7 @@ export default class DateSelector extends React.Component {
   }
   render() {
     if (!this.state || !this.state.channel) {
-      return <div>Loading {this.props.params.channelName} channel info.</div>;
+      return <div>Loading {this.props.match.params.channelName} channel info.</div>;
     }
     let numDays = (this.state.maxDate - this.state.minDate) / (24 * 60 * 60 * 1000);
     numDays = Math.max(numDays, 366);
@@ -85,11 +88,18 @@ export default class DateSelector extends React.Component {
         onChange={this.handleDateChange}
         value={this.state.date}
       />
-      {this.props.children}
     </div>);
   }
 }
-DateSelector.propTypes = util.propTypesRoute;
+DateSelector.propTypes = {
+  match: React.PropTypes.shape({
+    params: React.PropTypes.shape({
+      channelName: React.PropTypes.string.isRequired,
+      date: React.PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+};
 DateSelector.contextTypes = {
-  router: React.PropTypes.object,
+  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
+  router: React.PropTypes.shape(HashRouter.propTypes).isRequired,
 };

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -11,9 +9,3 @@ export function checkStatus(response) {
 export function parseJSON(response) {
   return response.json();
 }
-
-export const propTypesRoute = {
-  children: React.PropTypes.object,
-  route: React.PropTypes.object,
-  params: React.PropTypes.object,
-};
