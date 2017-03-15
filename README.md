@@ -15,17 +15,17 @@ I have tested this application with [export option for Free plan](https://get.sl
 
 ## Develop
 
-Install [Node 6 and npm](https://nodejs.org/en/download/). Execute `npm install` to install dependencies.
+Install [Node 6](https://nodejs.org/en/download/) and [yarn](https://yarnpkg.com/en/docs/install). Execute `yarn install` to install dependencies.
 
-Run `npm run-script build:summary` to create intermediate data.
+Run `yarn run-script build:summary` to create intermediate data.
 
-Run `npm start`. Now you can visit `http://localhost:8080/` to view the application.
+Run `yarn start`. Now you can visit `http://localhost:8080/` to view the application.
 
 ## Publish
 
 ```bash
 git checkout -B gh-pages
-npm run-script build
+yarn run build
 git add -f assets slack_export
 git commit -m "Build"
 git push origin gh-pages -f
