@@ -85,9 +85,9 @@ export default class App extends React.Component {
           <Divider />
           <Subheader>Channels</Subheader>
           {this.props.channelResolver.listChannels().map(c =>
-            <NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+            (<NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
               <ListItem primaryText={c.name} />
-            </NavLink>,
+            </NavLink>),
           )}
         </List>
       </Drawer>
