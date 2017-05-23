@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 
 import { ChannelResolver, UserResolver } from './resolver';
@@ -53,14 +54,14 @@ export default class HistoryView extends React.Component {
 }
 HistoryView.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
-  match: React.PropTypes.shape({
-    params: React.PropTypes.shape({
-      channelName: React.PropTypes.string.isRequired,
-      date: React.PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      channelName: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
 };
 HistoryView.contextTypes = {
-  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
-  userResolver: React.PropTypes.instanceOf(UserResolver).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HashRouter from 'react-router-dom/HashRouter';
 import Link from 'react-router-dom/Link';
 import FlatButton from 'material-ui/FlatButton';
@@ -19,8 +20,8 @@ const ChannelSelector = (props, context) => {
 ChannelSelector.propTypes = {
 };
 ChannelSelector.contextTypes = {
-  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
-  router: React.PropTypes.shape(HashRouter.propTypes).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  router: PropTypes.shape(HashRouter.propTypes).isRequired,
 };
 
 export default ChannelSelector;

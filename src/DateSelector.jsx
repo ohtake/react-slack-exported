@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HashRouter from 'react-router-dom/HashRouter';
 
 import DatePicker from 'material-ui/DatePicker';
@@ -92,14 +93,14 @@ export default class DateSelector extends React.Component {
   }
 }
 DateSelector.propTypes = {
-  match: React.PropTypes.shape({
-    params: React.PropTypes.shape({
-      channelName: React.PropTypes.string.isRequired,
-      date: React.PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      channelName: PropTypes.string.isRequired,
+      date: PropTypes.string,
     }).isRequired,
   }).isRequired,
 };
 DateSelector.contextTypes = {
-  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
-  router: React.PropTypes.shape(HashRouter.propTypes).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  router: PropTypes.shape(HashRouter.propTypes).isRequired,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import NavLink from 'react-router-dom/NavLink';
 import Route from 'react-router-dom/Route';
 
@@ -100,13 +101,13 @@ export default class App extends React.Component {
   }
 }
 App.propTypes = {
-  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
-  userResolver: React.PropTypes.instanceOf(UserResolver).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
 App.contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
 };
 App.childContextTypes = {
-  channelResolver: React.PropTypes.instanceOf(ChannelResolver).isRequired,
-  userResolver: React.PropTypes.instanceOf(UserResolver).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
