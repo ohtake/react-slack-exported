@@ -35,8 +35,8 @@
     "http-server": "^0.10.0",
     "json-loader": "^0.5.4",
     "npm-run-all": "^4.0.2",
-    "webpack": "^2.6.0",
-    "webpack-dev-server": "^2.4.5"
+    "webpack": "^3.2.0",
+    "webpack-dev-server": "^2.5.1"
   },
   "scripts": {
     "lint": "eslint src/**/* webpack.config.babel.js --color",

@@ -31,6 +31,7 @@ export default {
         sourceMap: true,
       }),
       new webpack.LoaderOptionsPlugin(),
+      new webpack.optimize.ModuleConcatenationPlugin(),
     ] : []),
   ],
   module: {
