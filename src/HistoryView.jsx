@@ -23,20 +23,20 @@ export default class HistoryView extends React.Component {
   }
   fetchHistory(props) {
     window.fetch(`slack_export/${props.match.params.channelName}/${props.match.params.date}.json`)
-    .then(util.checkStatus)
-    .then(util.parseJSON)
-    .then((data) => {
-      this.setState({
-        message: '',
-        data,
+      .then(util.checkStatus)
+      .then(util.parseJSON)
+      .then((data) => {
+        this.setState({
+          message: '',
+          data,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          message: err.toString(),
+          data: [],
+        });
       });
-    })
-    .catch((err) => {
-      this.setState({
-        message: err.toString(),
-        data: [],
-      });
-    });
   }
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();

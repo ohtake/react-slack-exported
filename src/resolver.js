@@ -10,15 +10,15 @@ class ResolverBase {
   }
   fetch() {
     return window.fetch(this.filename)
-    .then(util.checkStatus)
-    .then(util.parseJSON)
-    .then((data) => {
-      this.array = data;
-      this.map.clear();
-      data.forEach((item) => {
-        this.map.set(this.keySelector(item), item);
+      .then(util.checkStatus)
+      .then(util.parseJSON)
+      .then((data) => {
+        this.array = data;
+        this.map.clear();
+        data.forEach((item) => {
+          this.map.set(this.keySelector(item), item);
+        });
       });
-    });
   }
 }
 

@@ -31,20 +31,20 @@ export default class DateSelector extends React.Component {
     const channel = context.channelResolver.find(props.match.params.channelName);
     const date = DateSelector.dateStringToDate(props.match.params.date);
     window.fetch(`assets/channel_summary/${channel.name}.json`)
-    .then(util.checkStatus)
-    .then(util.parseJSON)
-    .then((data) => {
-      const minDate = data.counts.reduce((prevValue, currentValue) =>
-        ((prevValue && prevValue < currentValue.date) ? prevValue : currentValue.date)
-      , null);
-      const maxDate = data.counts.reduce((prevValue, currentValue) =>
-        ((prevValue && prevValue > currentValue.date) ? prevValue : currentValue.date)
-      , null);
-      const maxComments = data.counts.reduce((prevValue, currentValue) =>
-        ((prevValue > currentValue.count) ? prevValue : currentValue.count)
-      , 0);
-      this.setState({ channel, minDate: DateSelector.dateStringToDate(minDate), maxDate: DateSelector.dateStringToDate(maxDate), date, counts: data.counts, maxComments });
-    });
+      .then(util.checkStatus)
+      .then(util.parseJSON)
+      .then((data) => {
+        const minDate = data.counts.reduce((prevValue, currentValue) =>
+          ((prevValue && prevValue < currentValue.date) ? prevValue : currentValue.date)
+          , null);
+        const maxDate = data.counts.reduce((prevValue, currentValue) =>
+          ((prevValue && prevValue > currentValue.date) ? prevValue : currentValue.date)
+          , null);
+        const maxComments = data.counts.reduce((prevValue, currentValue) =>
+          ((prevValue > currentValue.count) ? prevValue : currentValue.count)
+          , 0);
+        this.setState({ channel, minDate: DateSelector.dateStringToDate(minDate), maxDate: DateSelector.dateStringToDate(maxDate), date, counts: data.counts, maxComments });
+      });
   }
   handleHeatmapClick(value) {
     if (!value) return;
