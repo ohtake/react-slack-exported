@@ -6,25 +6,25 @@
   "license": "ISC",
   "main": "src/index.jsx",
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "material-ui": "^0.19.0",
     "moment-timezone": "^0.5.13",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
-    "react-calendar-heatmap": "^1.1.0",
+    "react-calendar-heatmap": "^1.2.0",
     "react-dom": "^15.6.1",
     "react-markdown": "^2.5.0",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.2"
   },
   "peerDependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.1",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.6",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.8",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "cross-env": "^5.0.1",
+    "cross-env": "^5.0.5",
     "eslint": "^4.5.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-loader": "^1.9.0",
@@ -32,10 +32,10 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
     "http-server": "^0.10.0",
-    "json-loader": "^0.5.4",
+    "json-loader": "^0.5.7",
     "npm-run-all": "^4.0.2",
-    "webpack": "^3.2.0",
-    "webpack-dev-server": "^2.5.1"
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
   },
   "scripts": {
     "lint": "eslint src/**/* webpack.config.babel.js --color",
