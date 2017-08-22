@@ -4,15 +4,9 @@ import HashRouter from 'react-router-dom/HashRouter';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import { ChannelResolver, UserResolver } from './resolver';
 import App from './App';
-
-// Needed for onTouchTap
-// Check this repo:
-// https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
 
 const channelResolver = new ChannelResolver();
 const userResolver = new UserResolver();
