@@ -60,44 +60,44 @@ export default class App extends React.Component {
       display: 'block',
       borderLeft: `${theme.spacing.desktopGutterMini}px solid ${theme.palette.primary1Color}`,
     };
-    return (<div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
-      <AppBar
-        title="Slack exported"
-        onLeftIconButtonTouchTap={this.handleLeftIconButtonTouchTap}
-      />
-      <Drawer open={this.state.menuOpened} docked={this.state.menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
-        <Toolbar>
-          <ToolbarGroup firstChild>
-            {/* Needs firstChild to align others to left */}
-          </ToolbarGroup>
-          <ToolbarGroup>
-            <IconButton onClick={this.handleMenuPinned}>
-              {this.state.menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
-            </IconButton>
-            <IconButton onClick={this.handleMenuClose}>
-              <NavigationClose />
-            </IconButton>
-          </ToolbarGroup>
-        </Toolbar>
-        <List>
-          <NavLink to="/" onClick={this.handleMenuClick} exact activeStyle={activeStyle}>
-            <ListItem primaryText="Home" leftIcon={<ActionHome />} />
-          </NavLink>
-          <Divider />
-          <Subheader>Channels</Subheader>
-          {this.props.channelResolver.listChannels().map(c =>
-            (<NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
-              <ListItem primaryText={c.name} />
-            </NavLink>),
-          )}
-        </List>
-      </Drawer>
-      <div style={{ padding: '8px' }}>
-        <Route path="/" component={ChannelSelector} />
-        <Route path="/channel/:channelName" component={DateSelector} />
-        <Route path="/channel/:channelName/date/:date" component={HistoryView} />
-      </div>
-    </div>);
+    return (
+      <div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
+        <AppBar
+          title="Slack exported"
+          onLeftIconButtonTouchTap={this.handleLeftIconButtonTouchTap}
+        />
+        <Drawer open={this.state.menuOpened} docked={this.state.menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
+          <Toolbar>
+            <ToolbarGroup firstChild>
+              {/* Needs firstChild to align others to left */}
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <IconButton onClick={this.handleMenuPinned}>
+                {this.state.menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
+              </IconButton>
+              <IconButton onClick={this.handleMenuClose}>
+                <NavigationClose />
+              </IconButton>
+            </ToolbarGroup>
+          </Toolbar>
+          <List>
+            <NavLink to="/" onClick={this.handleMenuClick} exact activeStyle={activeStyle}>
+              <ListItem primaryText="Home" leftIcon={<ActionHome />} />
+            </NavLink>
+            <Divider />
+            <Subheader>Channels</Subheader>
+            {this.props.channelResolver.listChannels().map(c => (
+              <NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+                <ListItem primaryText={c.name} />
+              </NavLink>))}
+          </List>
+        </Drawer>
+        <div style={{ padding: '8px' }}>
+          <Route path="/" component={ChannelSelector} />
+          <Route path="/channel/:channelName" component={DateSelector} />
+          <Route path="/channel/:channelName/date/:date" component={HistoryView} />
+        </div>
+      </div>);
   }
 }
 App.propTypes = {

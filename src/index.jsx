@@ -21,11 +21,12 @@ Promise.all([channelResolver.fetch(), userResolver.fetch()])
     document.head.appendChild(elStyle);
     const stylesheet = elStyle.sheet;
     stylesheet.insertRule(`a { color: ${theme.palette.primary2Color}; }`, stylesheet.cssRules.length);
-    ReactDOM.render((
+    ReactDOM.render(
       <MuiThemeProvider muiTheme={theme}>
         <HashRouter>
           <App channelResolver={channelResolver} userResolver={userResolver} />
         </HashRouter>
-      </MuiThemeProvider>
-    ), document.getElementById('app'));
+      </MuiThemeProvider>,
+      document.getElementById('app'),
+    );
   });

@@ -35,15 +35,19 @@ export default class DateSelector extends React.Component {
       .then(util.parseJSON)
       .then((data) => {
         const minDate = data.counts.reduce((prevValue, currentValue) =>
-          ((prevValue && prevValue < currentValue.date) ? prevValue : currentValue.date)
-          , null);
+          ((prevValue && prevValue < currentValue.date) ? prevValue : currentValue.date), null);
         const maxDate = data.counts.reduce((prevValue, currentValue) =>
-          ((prevValue && prevValue > currentValue.date) ? prevValue : currentValue.date)
-          , null);
+          ((prevValue && prevValue > currentValue.date) ? prevValue : currentValue.date), null);
         const maxComments = data.counts.reduce((prevValue, currentValue) =>
-          ((prevValue > currentValue.count) ? prevValue : currentValue.count)
-          , 0);
-        this.setState({ channel, minDate: DateSelector.dateStringToDate(minDate), maxDate: DateSelector.dateStringToDate(maxDate), date, counts: data.counts, maxComments });
+          ((prevValue > currentValue.count) ? prevValue : currentValue.count), 0);
+        this.setState({
+          channel,
+          minDate: DateSelector.dateStringToDate(minDate),
+          maxDate: DateSelector.dateStringToDate(maxDate),
+          date,
+          counts: data.counts,
+          maxComments,
+        });
       });
   }
   handleHeatmapClick(value) {
@@ -71,25 +75,26 @@ export default class DateSelector extends React.Component {
     }
     let numDays = (this.state.maxDate - this.state.minDate) / (24 * 60 * 60 * 1000);
     numDays = Math.max(numDays, 366);
-    return (<div>
-      <p>{this.state.channel.name} channel ({moment(this.state.minDate).format('YYYY-MM-DD')} - {moment(this.state.maxDate).format('YYYY-MM-DD')})</p>
-      <div className="react-calendar-heatmap">
-        <CalendarHeatmap
-          endDate={this.state.maxDate}
-          numDays={numDays}
-          values={this.state.counts}
-          onClick={this.handleHeatmapClick}
-          classForValue={this.classForValue}
+    return (
+      <div>
+        <p>{this.state.channel.name} channel ({moment(this.state.minDate).format('YYYY-MM-DD')} - {moment(this.state.maxDate).format('YYYY-MM-DD')})</p>
+        <div className="react-calendar-heatmap">
+          <CalendarHeatmap
+            endDate={this.state.maxDate}
+            numDays={numDays}
+            values={this.state.counts}
+            onClick={this.handleHeatmapClick}
+            classForValue={this.classForValue}
+          />
+        </div>
+        <DatePicker
+          floatingLabelText="PST/PDT date"
+          minDate={this.state.minDate}
+          maxDate={this.state.maxDate}
+          onChange={this.handleDateChange}
+          value={this.state.date}
         />
-      </div>
-      <DatePicker
-        floatingLabelText="PST/PDT date"
-        minDate={this.state.minDate}
-        maxDate={this.state.maxDate}
-        onChange={this.handleDateChange}
-        value={this.state.date}
-      />
-    </div>);
+      </div>);
   }
 }
 DateSelector.propTypes = {
