@@ -1,10 +1,9 @@
 # react-slack-exported
 
 [![Build Status](https://travis-ci.org/ohtake/react-slack-exported.svg?branch=master)](https://travis-ci.org/ohtake/react-slack-exported)
-[![Code Climate](https://codeclimate.com/github/ohtake/react-slack-exported/badges/gpa.svg)](https://codeclimate.com/github/ohtake/react-slack-exported)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8407db0613919952d1ce/maintainability)](https://codeclimate.com/github/ohtake/react-slack-exported/maintainability)
 [![dependencies Status](https://david-dm.org/ohtake/react-slack-exported/status.svg)](https://david-dm.org/ohtake/react-slack-exported)
 [![devDependencies Status](https://david-dm.org/ohtake/react-slack-exported/dev-status.svg)](https://david-dm.org/ohtake/react-slack-exported?type=dev)
-[![peerDependencies Status](https://david-dm.org/ohtake/react-slack-exported/peer-status.svg)](https://david-dm.org/ohtake/react-slack-exported?type=peer)
 
 You can view [exported Slack history json](https://get.slack.help/hc/en-us/articles/201658943-Exporting-your-team-s-Slack-history) with React.
 
