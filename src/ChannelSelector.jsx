@@ -15,7 +15,7 @@ const ChannelSelector = (props, context) => {
         <FlatButton key={c.id} primary={currentPath === path || currentPath.indexOf(`${path}/`) === 0}>#{c.name}</FlatButton>
       </RouterLink>);
   });
-  return <div><h2>Channels</h2><div>{nodes}</div></div>;
+  return <React.Fragment><h2>Channels</h2><div>{nodes}</div></React.Fragment>;
 };
 ChannelSelector.propTypes = {
 };

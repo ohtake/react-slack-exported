@@ -47,8 +47,8 @@ export default class HistoryView extends React.Component {
           <div>
             <span className="header">
               {datetimeFormatter(new Date(m.ts * 1000))}
-              {user ? <span> <img src={user.profile.image_24} alt="*" width="12" height="12" />{user.name}</span> : null}
-              {m.bot_id ? <span> (BOT) {m.bot_id}</span> : null}
+              {user ? <React.Fragment> <img src={user.profile.image_24} alt="*" width="12" height="12" />{user.name}</React.Fragment> : null}
+              {m.bot_id ? <React.Fragment> (BOT) {m.bot_id}</React.Fragment> : null}
             </span>
             {p.children}
           </div>
@@ -56,7 +56,7 @@ export default class HistoryView extends React.Component {
       };
       return (<li key={m.ts}><ReactMarkdown source={this.context.userResolver.replaceAll(m.text)} renderers={renderers} /></li>);
     });
-    return (<div><div>{this.state.message}</div><ul id="history">{nodes}</ul></div>);
+    return (<React.Fragment><div>{this.state.message}</div><ul id="history">{nodes}</ul></React.Fragment>);
   }
 }
 HistoryView.propTypes = {

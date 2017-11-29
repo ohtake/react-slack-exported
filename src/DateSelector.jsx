@@ -76,7 +76,7 @@ export default class DateSelector extends React.Component {
     let numDays = (this.state.maxDate - this.state.minDate) / (24 * 60 * 60 * 1000);
     numDays = Math.max(numDays, 366);
     return (
-      <div>
+      <React.Fragment>
         <p>{this.state.channel.name} channel ({moment(this.state.minDate).format('YYYY-MM-DD')} - {moment(this.state.maxDate).format('YYYY-MM-DD')})</p>
         <div className="react-calendar-heatmap">
           <CalendarHeatmap
@@ -94,7 +94,7 @@ export default class DateSelector extends React.Component {
           onChange={this.handleDateChange}
           value={this.state.date}
         />
-      </div>);
+      </React.Fragment>);
   }
 }
 DateSelector.propTypes = {
