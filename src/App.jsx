@@ -25,7 +25,7 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = { menuOpened: false, menuDocked: false };
-    this.handleLeftIconButtonTouchTap = this.handleLeftIconButtonTouchTap.bind(this);
+    this.handleLeftIconButtonClick = this.handleLeftIconButtonClick.bind(this);
     this.handleRequestChange = this.handleRequestChange.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuPinned = this.handleMenuPinned.bind(this);
@@ -38,7 +38,7 @@ export default class App extends React.Component {
       userResolver: this.props.userResolver,
     };
   }
-  handleLeftIconButtonTouchTap(/* e */) {
+  handleLeftIconButtonClick(/* e */) {
     this.setState({ menuOpened: !this.state.menuOpened });
   }
   handleRequestChange(open /* , reason */) {
@@ -64,7 +64,7 @@ export default class App extends React.Component {
       <div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
         <AppBar
           title="Slack exported"
-          onLeftIconButtonTouchTap={this.handleLeftIconButtonTouchTap}
+          onLeftIconButtonClick={this.handleLeftIconButtonClick}
         />
         <Drawer open={this.state.menuOpened} docked={this.state.menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
           <Toolbar>
