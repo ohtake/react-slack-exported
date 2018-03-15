@@ -32,17 +32,17 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "http-server": "^0.11.1",
-    "json-loader": "^0.5.7",
     "npm-run-all": "^4.1.2",
-    "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.2"
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-dev-server": "^3.1.1"
   },
   "scripts": {
     "lint": "eslint src/**/* webpack.config.babel.js --color",
     "build": "npm-run-all -l -p build:*",
-    "build:js": "cross-env NODE_ENV=production webpack --progress --colors --config webpack.config.babel.js",
+    "build:js": "cross-env NODE_ENV=production webpack --mode production --progress --colors --config webpack.config.babel.js",
     "build:summary": "babel-node generate_channel_summary.js",
-    "start": "webpack-dev-server --progress --colors --config webpack.config.babel.js",
+    "start": "webpack-dev-server --mode development --progress --colors --config webpack.config.babel.js",
     "server": "http-server"
   }
 }
