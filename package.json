@@ -38,7 +38,7 @@
     "webpack-dev-server": "^3.1.1"
   },
   "scripts": {
-    "lint": "eslint src/**/* webpack.config.babel.js --color",
+    "lint": "eslint src/**/* *.js --color",
     "build": "npm-run-all -l -p build:*",
     "build:js": "cross-env NODE_ENV=production webpack --mode production --progress --colors --config webpack.config.babel.js",
     "build:summary": "babel-node generate_channel_summary.js",

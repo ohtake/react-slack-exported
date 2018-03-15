@@ -1,6 +1,8 @@
 // Read 'slack_export/{channel_name}/*.json' and
 // emit number of messages for each day to 'assets/channel_summary/{channel_name}.json'.
 
+/* eslint-disable no-console */
+
 import fs from 'fs';
 import path from 'path';
 
@@ -28,7 +30,7 @@ class ChannelSummary {
 
 function readFiles(dir, files) {
   const promises = [];
-  for (const file of files) {
+  files.forEach((file) => {
     const promise = new Promise((onFulfilled, onRejected) => {
       fs.readFile(path.join(dir, file), (err, data) => {
         if (err) {
@@ -41,13 +43,13 @@ function readFiles(dir, files) {
       });
     });
     promises.push(promise);
-  }
+  });
   return promises;
 }
 
 function readChannels(channelNames) {
   const promises = [];
-  for (const channelName of channelNames) {
+  channelNames.forEach((channelName) => {
     const dir = path.join('slack_export', channelName);
     promises.push(new Promise((onFulfilled, onRejected) => {
       fs.readdir(dir, (err, files) => {
@@ -62,11 +64,11 @@ function readChannels(channelNames) {
           },
           (err2) => {
             onRejected(err2);
-          }
+          },
         );
       });
     }));
-  }
+  });
   return promises;
 }
 
@@ -86,7 +88,7 @@ function prepareOutputDirectorySync() {
 
 function writeSummaries(summaries) {
   const promises = [];
-  for (const summary of summaries) {
+  summaries.forEach((summary) => {
     promises.push(new Promise((onFulfilled, onRejected) => {
       const filename = path.join('assets', 'channel_summary', `${summary.channelName}.json`);
       const data = JSON.stringify(summary);
@@ -95,7 +97,7 @@ function writeSummaries(summaries) {
         else onFulfilled();
       });
     }));
-  }
+  });
   return promises;
 }
 
@@ -103,20 +105,14 @@ const channelNames = listChannelsSync();
 const promisesRead = readChannels(channelNames);
 
 Promise.all(promisesRead)
-.then(
-  (summaries) => {
+  .then((summaries) => {
     prepareOutputDirectorySync();
     const promisesWrite = writeSummaries(summaries);
     return Promise.all(promisesWrite);
-  }
-)
-.then(
-  () => {
+  })
+  .then(() => {
     console.log('done');
-  }
-)
-.catch(
-  (err) => {
+  })
+  .catch((err) => {
     console.error(err);
-  }
-);
+  });
