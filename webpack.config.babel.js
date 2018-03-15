@@ -33,7 +33,7 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'es2015'],
+            presets: ['react', 'env'],
             plugins: [
               ...(isProduction ? [
                 'transform-react-remove-prop-types',
@@ -48,7 +48,7 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['es2015'],
+            presets: ['env'],
           },
         },
       },
