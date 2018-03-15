@@ -1,17 +1,24 @@
 // Read 'slack_export/{channel_name}/*.json' and
 // emit number of messages for each day to 'assets/channel_summary/{channel_name}.json'.
 
-/* eslint-disable no-console */
-
 import fs from 'fs';
+import util from 'util';
 import path from 'path';
 
-function listChannelsSync() {
-  const filenames = fs.readdirSync('slack_export');
-  return filenames.filter((f) => {
-    const stat = fs.statSync(path.join('slack_export', f));
-    return stat.isDirectory();
-  });
+const accessP = util.promisify(fs.access);
+const mkdirP = util.promisify(fs.mkdir);
+const readFileP = util.promisify(fs.readFile);
+const readdirP = util.promisify(fs.readdir);
+const statP = util.promisify(fs.stat);
+const writeFileP = util.promisify(fs.writeFile);
+
+async function listChannels() {
+  const filenames = await readdirP('slack_export');
+  const directories = await Promise.all(filenames.map(async (f) => {
+    const stat = await statP(path.join('slack_export', f));
+    return stat.isDirectory() ? f : null;
+  }));
+  return directories.filter(d => d !== null);
 }
 
 class DayInfo {
@@ -28,91 +35,45 @@ class ChannelSummary {
   }
 }
 
-function readFiles(dir, files) {
-  const promises = [];
-  files.forEach((file) => {
-    const promise = new Promise((onFulfilled, onRejected) => {
-      fs.readFile(path.join(dir, file), (err, data) => {
-        if (err) {
-          onRejected(err);
-          return;
-        }
-        const messages = JSON.parse(data);
-        const date = path.basename(file, '.json');
-        onFulfilled(new DayInfo(date, messages.length));
-      });
-    });
-    promises.push(promise);
-  });
-  return promises;
+async function readDayInfo(dir, file) {
+  const data = await readFileP(path.join(dir, file));
+  const messages = JSON.parse(data);
+  const date = path.basename(file, '.json');
+  return new DayInfo(date, messages.length);
 }
 
-function readChannels(channelNames) {
-  const promises = [];
-  channelNames.forEach((channelName) => {
-    const dir = path.join('slack_export', channelName);
-    promises.push(new Promise((onFulfilled, onRejected) => {
-      fs.readdir(dir, (err, files) => {
-        if (err) {
-          onRejected(err);
-          return;
-        }
-        const promises2 = readFiles(dir, files);
-        Promise.all(promises2).then(
-          (days) => {
-            onFulfilled(new ChannelSummary(path.basename(dir), days));
-          },
-          (err2) => {
-            onRejected(err2);
-          },
-        );
-      });
-    }));
-  });
-  return promises;
+async function readChannelSummary(channelName) {
+  const dir = path.join('slack_export', channelName);
+  const files = await readdirP(dir);
+  const days = await Promise.all(files.map(f => readDayInfo(dir, f)));
+  return new ChannelSummary(path.basename(dir), days);
 }
 
-function mkdirSync(dir) {
+async function mkdir(dir) {
   try {
-    fs.accessSync(dir, fs.F_OK);
+    await accessP(dir, fs.F_OK);
     // nop
   } catch (ex) {
-    fs.mkdirSync(dir);
+    await mkdirP(dir);
   }
 }
 
-function prepareOutputDirectorySync() {
-  mkdirSync('assets');
-  mkdirSync(path.join('assets', 'channel_summary'));
+async function prepareOutputDirectory() {
+  await mkdir('assets');
+  await mkdir(path.join('assets', 'channel_summary'));
 }
 
-function writeSummaries(summaries) {
-  const promises = [];
-  summaries.forEach((summary) => {
-    promises.push(new Promise((onFulfilled, onRejected) => {
-      const filename = path.join('assets', 'channel_summary', `${summary.channelName}.json`);
-      const data = JSON.stringify(summary);
-      fs.writeFile(filename, data, (err) => {
-        if (err) onRejected(err);
-        else onFulfilled();
-      });
-    }));
-  });
-  return promises;
+async function writeChannelSummary(summary) {
+  const filename = path.join('assets', 'channel_summary', `${summary.channelName}.json`);
+  const data = JSON.stringify(summary);
+  await writeFileP(filename, data);
 }
 
-const channelNames = listChannelsSync();
-const promisesRead = readChannels(channelNames);
+async function main() {
+  const channelNames = await listChannels();
+  const summaries = await Promise.all(channelNames.map(n => readChannelSummary(n)));
+  await prepareOutputDirectory();
+  await Promise.all(summaries.map(s => writeChannelSummary(s)));
+}
 
-Promise.all(promisesRead)
-  .then((summaries) => {
-    prepareOutputDirectorySync();
-    const promisesWrite = writeSummaries(summaries);
-    return Promise.all(promisesWrite);
-  })
-  .then(() => {
-    console.log('done');
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+main();
