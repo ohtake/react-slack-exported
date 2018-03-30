@@ -74,15 +74,16 @@ class DateSelector extends React.Component {
     if (!this.state || !this.state.channel) {
       return <div>Loading {this.props.match.params.channelName} channel info.</div>;
     }
-    let numDays = (this.state.maxDate - this.state.minDate) / (24 * 60 * 60 * 1000);
-    numDays = Math.max(numDays, 366);
+    const startDateValue = this.state.minDate.valueOf() - (24 * 60 * 60 * 1000);
+    const oneYearValue = this.state.maxDate.valueOf() - (365 * 24 * 60 * 60 * 1000);
+    const startDate = new Date(Math.min(startDateValue, oneYearValue));
     return (
       <React.Fragment>
         <p>{this.state.channel.name} channel ({moment(this.state.minDate).format('YYYY-MM-DD')} - {moment(this.state.maxDate).format('YYYY-MM-DD')})</p>
         <div className="react-calendar-heatmap">
           <CalendarHeatmap
+            startDate={startDate}
             endDate={this.state.maxDate}
-            numDays={numDays}
             values={this.state.counts}
             onClick={this.handleHeatmapClick}
             classForValue={this.classForValue}
