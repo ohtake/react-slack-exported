@@ -20,6 +20,7 @@ import ChannelSelector from './ChannelSelector';
 import DateSelector from './DateSelector';
 import HistoryView from './HistoryView';
 import { ChannelResolver, UserResolver } from './resolver';
+import { ChannelResolverContext, UserResolverContext } from './contexts';
 
 export default class App extends React.Component {
   constructor() {
@@ -31,12 +32,6 @@ export default class App extends React.Component {
     this.handleMenuPinned = this.handleMenuPinned.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
     this.menuWidth = 250;
-  }
-  getChildContext() {
-    return {
-      channelResolver: this.props.channelResolver,
-      userResolver: this.props.userResolver,
-    };
   }
   handleLeftIconButtonClick(/* e */) {
     this.setState({ menuOpened: !this.state.menuOpened });
@@ -54,7 +49,7 @@ export default class App extends React.Component {
   handleMenuClose() {
     this.setState({ menuOpened: false });
   }
-  render() {
+  renderInner() {
     const theme = this.context.muiTheme;
     const activeStyle = {
       display: 'block',
@@ -99,6 +94,15 @@ export default class App extends React.Component {
         </div>
       </div>);
   }
+  render() {
+    return (
+      <ChannelResolverContext.Provider value={this.props.channelResolver}>
+        <UserResolverContext.Provider value={this.props.userResolver}>
+          {this.renderInner()}
+        </UserResolverContext.Provider>
+      </ChannelResolverContext.Provider>
+    );
+  }
 }
 App.propTypes = {
   channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
@@ -106,8 +110,4 @@ App.propTypes = {
 };
 App.contextTypes = {
   muiTheme: PropTypes.object.isRequired,
-};
-App.childContextTypes = {
-  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
-  userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };

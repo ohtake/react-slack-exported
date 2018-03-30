@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 
-import { ChannelResolver, UserResolver } from './resolver';
-
+import { UserResolver } from './resolver';
+import { withUserResolver } from './contexts';
 import * as util from './util';
 
-export default class HistoryView extends React.Component {
+class HistoryView extends React.Component {
   constructor() {
     super();
     this.initialState = {
@@ -41,7 +41,7 @@ export default class HistoryView extends React.Component {
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();
     const nodes = this.state.data.map((m) => {
-      const user = this.context.userResolver.find(m.user);
+      const user = this.props.userResolver.find(m.user);
       const renderers = {
         root: p => (
           <div>
@@ -54,7 +54,7 @@ export default class HistoryView extends React.Component {
           </div>
         ),
       };
-      return (<li key={m.ts}><ReactMarkdown source={this.context.userResolver.replaceAll(m.text)} renderers={renderers} /></li>);
+      return (<li key={m.ts}><ReactMarkdown source={this.props.userResolver.replaceAll(m.text)} renderers={renderers} /></li>);
     });
     return (<React.Fragment><div>{this.state.message}</div><ul id="history">{nodes}</ul></React.Fragment>);
   }
@@ -67,8 +67,7 @@ HistoryView.propTypes = {
       date: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-};
-HistoryView.contextTypes = {
-  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
   userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
+
+export default withUserResolver(HistoryView);

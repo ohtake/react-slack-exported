@@ -7,29 +7,30 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import moment from 'moment-timezone';
 
 import { ChannelResolver } from './resolver';
+import { withChannelResolver } from './contexts';
 import * as util from './util';
 
-export default class DateSelector extends React.Component {
+class DateSelector extends React.Component {
   static dateStringToDate(str) {
     if (!str) return null;
     const date = moment(str);
     return date.toDate();
   }
-  constructor(props, context) {
+  constructor(props) {
     super();
 
-    this.propsToState(props, context);
+    this.propsToState(props.channelResolver, props.match);
 
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleHeatmapClick = this.handleHeatmapClick.bind(this);
     this.classForValue = this.classForValue.bind(this);
   }
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.propsToState(nextProps, nextContext);
+  componentWillReceiveProps(nextProps) {
+    this.propsToState(nextProps.channelResolver, nextProps.match);
   }
-  propsToState(props, context) {
-    const channel = context.channelResolver.find(props.match.params.channelName);
-    const date = DateSelector.dateStringToDate(props.match.params.date);
+  propsToState(channelResolver, match) {
+    const channel = channelResolver.find(match.params.channelName);
+    const date = DateSelector.dateStringToDate(match.params.date);
     window.fetch(`assets/channel_summary/${channel.name}.json`)
       .then(util.checkStatus)
       .then(util.parseJSON)
@@ -104,8 +105,10 @@ DateSelector.propTypes = {
       date: PropTypes.string,
     }).isRequired,
   }).isRequired,
+  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
 };
 DateSelector.contextTypes = {
-  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
   router: PropTypes.shape(HashRouter.propTypes).isRequired,
 };
+
+export default withChannelResolver(DateSelector);
