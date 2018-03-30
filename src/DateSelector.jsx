@@ -33,7 +33,9 @@ class DateSelector extends React.Component {
     this.classForValue = this.classForValue.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    this.propsToState(nextProps.channelResolver, nextProps.match);
+    if (nextProps.match.params.channelName !== this.props.match.params.channelName) {
+      this.propsToState(nextProps.channelResolver, nextProps.match);
+    }
   }
   propsToState(channelResolver, match) {
     const channel = channelResolver.find(match.params.channelName);
