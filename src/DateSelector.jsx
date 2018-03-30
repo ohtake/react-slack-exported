@@ -4,7 +4,7 @@ import HashRouter from 'react-router-dom/HashRouter';
 
 import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
-import moment from 'moment-timezone';
+import padStart from 'lodash/padStart';
 
 import { ChannelResolver } from './resolver';
 import { withChannelResolver } from './contexts';
@@ -13,8 +13,15 @@ import * as util from './util';
 class DateSelector extends React.Component {
   static dateStringToDate(str) {
     if (!str) return null;
-    const date = moment(str);
-    return date.toDate();
+    const re = /(\d+)-(\d+)-(\d+)/;
+    const match = re.exec(str);
+    return new Date(Date.UTC(parseInt(match[1], 10), parseInt(match[2], 10) - 1, parseInt(match[3], 10)));
+  }
+  static dateToString(date) {
+    const y = date.getUTCFullYear();
+    const m = padStart(date.getUTCMonth() + 1, 2, '0');
+    const d = padStart(date.getUTCDate(), 2, '0');
+    return `${y}-${m}-${d}`;
   }
   constructor(props) {
     super();
@@ -56,7 +63,7 @@ class DateSelector extends React.Component {
     this.context.router.history.push(`/channel/${this.state.channel.name}/date/${value.date}`);
   }
   handleDateChange(n, date) {
-    this.context.router.history.push(`/channel/${this.state.channel.name}/date/${moment(date).format('YYYY-MM-DD')}`);
+    this.context.router.history.push(`/channel/${this.state.channel.name}/date/${DateSelector.dateToString(date)}`);
   }
   classForValue(value) {
     if (!value || value.count === 0) {
@@ -79,7 +86,7 @@ class DateSelector extends React.Component {
     const startDate = new Date(Math.min(startDateValue, oneYearValue));
     return (
       <React.Fragment>
-        <p>{this.state.channel.name} channel ({moment(this.state.minDate).format('YYYY-MM-DD')} - {moment(this.state.maxDate).format('YYYY-MM-DD')})</p>
+        <p>{this.state.channel.name} channel ({DateSelector.dateToString(this.state.minDate)} - {DateSelector.dateToString(this.state.maxDate)})</p>
         <div className="react-calendar-heatmap">
           <CalendarHeatmap
             startDate={startDate}
