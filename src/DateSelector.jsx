@@ -6,11 +6,19 @@ import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import padStart from 'lodash/padStart';
 
-import { ChannelResolver } from './resolver';
+// import { ChannelResolver } from './resolver';
 import { withChannelResolver } from './contexts';
 import * as util from './util';
 
 class DateSelector extends React.Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState || !prevState.channel || nextProps.match.params.channelName !== prevState.channel.name) {
+      const channel = nextProps.channelResolver.find(nextProps.match.params.channelName);
+      const date = DateSelector.dateStringToDate(nextProps.match.params.date);
+      return { channel, date };
+    }
+    return null;
+  }
   static dateStringToDate(str) {
     if (!str) return null;
     const re = /(\d+)-(\d+)-(\d+)/;
@@ -23,24 +31,23 @@ class DateSelector extends React.Component {
     const d = padStart(date.getUTCDate(), 2, '0');
     return `${y}-${m}-${d}`;
   }
-  constructor(props) {
+  constructor() {
     super();
-
-    this.propsToState(props.channelResolver, props.match);
 
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleHeatmapClick = this.handleHeatmapClick.bind(this);
     this.classForValue = this.classForValue.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.channelName !== this.props.match.params.channelName) {
-      this.propsToState(nextProps.channelResolver, nextProps.match);
+  componentDidMount() {
+    this.fetchChannelSummary();
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.channel !== prevState.channel) {
+      this.fetchChannelSummary();
     }
   }
-  propsToState(channelResolver, match) {
-    const channel = channelResolver.find(match.params.channelName);
-    const date = DateSelector.dateStringToDate(match.params.date);
-    window.fetch(`assets/channel_summary/${channel.name}.json`)
+  fetchChannelSummary() {
+    window.fetch(`assets/channel_summary/${this.state.channel.name}.json`)
       .then(util.checkStatus)
       .then(util.parseJSON)
       .then((data) => {
@@ -51,10 +58,8 @@ class DateSelector extends React.Component {
         const maxComments = data.counts.reduce((prevValue, currentValue) =>
           ((prevValue > currentValue.count) ? prevValue : currentValue.count), 0);
         this.setState({
-          channel,
           minDate: DateSelector.dateStringToDate(minDate),
           maxDate: DateSelector.dateStringToDate(maxDate),
-          date,
           counts: data.counts,
           maxComments,
         });
@@ -80,7 +85,7 @@ class DateSelector extends React.Component {
     return 'velocity-4';
   }
   render() {
-    if (!this.state || !this.state.channel) {
+    if (!this.state.minDate) {
       return <div>Loading {this.props.match.params.channelName} channel info.</div>;
     }
     const startDateValue = this.state.minDate.valueOf() - (24 * 60 * 60 * 1000);
@@ -115,7 +120,7 @@ DateSelector.propTypes = {
       date: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
+  // channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
 };
 DateSelector.contextTypes = {
   router: PropTypes.shape(HashRouter.propTypes).isRequired,

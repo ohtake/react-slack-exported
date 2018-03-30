@@ -7,22 +7,32 @@ import { withUserResolver } from './contexts';
 import * as util from './util';
 
 class HistoryView extends React.Component {
-  constructor() {
-    super();
-    this.initialState = {
-      message: 'Loading...',
-      data: [],
-    };
-    this.state = this.initialState;
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { channelName, date } = nextProps.match.params;
+    if (!prevState
+      || prevState.channelName !== channelName
+      || prevState.date !== date) {
+      return {
+        channelName,
+        date,
+        message: `Loading ${HistoryView.generateJsonPath(channelName, date)}...`,
+      };
+    }
+    return null;
+  }
+  static generateJsonPath(channelName, date) {
+    return `slack_export/${channelName}/${date}.json`;
   }
   componentDidMount() {
-    this.fetchHistory(this.props);
+    this.fetchHistory();
   }
-  componentWillReceiveProps(nextProps) {
-    this.fetchHistory(nextProps);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.channelName !== prevState.channelName || this.state.date !== prevState.date) {
+      this.fetchHistory();
+    }
   }
-  fetchHistory(props) {
-    window.fetch(`slack_export/${props.match.params.channelName}/${props.match.params.date}.json`)
+  fetchHistory() {
+    window.fetch(`slack_export/${this.state.channelName}/${this.state.date}.json`)
       .then(util.checkStatus)
       .then(util.parseJSON)
       .then((data) => {
@@ -40,7 +50,7 @@ class HistoryView extends React.Component {
   }
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();
-    const nodes = this.state.data.map((m) => {
+    const nodes = (this.state.data || []).map((m) => {
       const user = this.props.userResolver.find(m.user);
       const renderers = {
         root: p => (
