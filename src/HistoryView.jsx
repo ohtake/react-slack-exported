@@ -25,6 +25,11 @@ class HistoryView extends React.Component {
     return `slack_export/${channelName}/${date}.json`;
   }
 
+  constructor() {
+    super();
+    this.state = {};
+  }
+
   componentDidMount() {
     this.fetchHistory();
   }

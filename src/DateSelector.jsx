@@ -40,6 +40,7 @@ class DateSelector extends React.Component {
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleHeatmapClick = this.handleHeatmapClick.bind(this);
     this.classForValue = this.classForValue.bind(this);
+    this.state = {};
   }
 
   componentDidMount() {
