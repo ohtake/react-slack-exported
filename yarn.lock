@@ -2044,13 +2044,14 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     stream-shift "^1.0.0"
 
 ecstatic@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/ecstatic/-/ecstatic-3.2.0.tgz#1b1aee1ca7c6b99cfb5cf6c9b26b481b90c4409f"
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/ecstatic/-/ecstatic-3.3.1.tgz#b15b5b036c2233defc78d7bacbd8765226c95577"
+  integrity sha512-/rrctvxZ78HMI/tPIsqdvFKHHscxR3IJuKrZI2ZoUgkt2SiufyLFBmcco+aqQBIu6P1qBsUNG3drAAGLx80vTQ==
   dependencies:
     he "^1.1.1"
-    mime "^1.4.1"
+    mime "^1.6.0"
     minimist "^1.1.0"
-    url-join "^2.0.2"
+    url-join "^2.0.5"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -4010,7 +4011,7 @@ mime-types@~2.1.17, mime-types@~2.1.24:
   dependencies:
     mime-db "1.40.0"
 
-mime@1.6.0, mime@^1.4.1:
+mime@1.6.0, mime@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
@@ -6231,7 +6232,7 @@ urix@^0.1.0:
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
 
-url-join@^2.0.2:
+url-join@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/url-join/-/url-join-2.0.5.tgz#5af22f18c052a000a48d7b82c5e9c2e2feeda728"
   integrity sha1-WvIvGMBSoACkjXuCxenC4v7tpyg=
