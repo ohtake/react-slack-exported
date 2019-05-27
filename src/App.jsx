@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NavLink from 'react-router-dom/NavLink';
-import Route from 'react-router-dom/Route';
+import { NavLink, Route } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';

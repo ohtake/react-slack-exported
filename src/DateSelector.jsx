@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HashRouter from 'react-router-dom/HashRouter';
+import { createHashHistory } from 'history';
 
 import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
@@ -74,15 +74,15 @@ class DateSelector extends React.Component {
 
   handleHeatmapClick(value) {
     if (!value) return;
-    const { router } = this.context;
     const { channel } = this.state;
-    router.history.push(`/channel/${channel.name}/date/${value.date}`);
+    const history = createHashHistory();
+    history.push(`/channel/${channel.name}/date/${value.date}`);
   }
 
   handleDateChange(n, date) {
-    const { router } = this.context;
     const { channel } = this.state;
-    router.history.push(`/channel/${channel.name}/date/${DateSelector.dateToString(date)}`);
+    const history = createHashHistory();
+    history.push(`/channel/${channel.name}/date/${DateSelector.dateToString(date)}`);
   }
 
   classForValue(value) {
@@ -158,9 +158,6 @@ DateSelector.propTypes = {
     }).isRequired,
   }).isRequired,
   // channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
-};
-DateSelector.contextTypes = {
-  router: PropTypes.shape(HashRouter.propTypes).isRequired,
 };
 
 export default withChannelResolver(DateSelector);
