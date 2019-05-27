@@ -16,7 +16,7 @@ I have tested this application with [export option for Free plan](https://get.sl
 
 ## Develop
 
-Install [Node 8](https://nodejs.org/en/download/) and [yarn](https://yarnpkg.com/en/docs/install). Execute `yarn install` to install dependencies.
+Install [Node 10](https://nodejs.org/en/download/) and [yarn](https://yarnpkg.com/en/docs/install). Execute `yarn install` to install dependencies.
 
 Run `yarn run-script build:summary` to create intermediate data.
 

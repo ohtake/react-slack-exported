@@ -6,7 +6,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
   entry: [
-    'babel-polyfill',
     'whatwg-fetch',
     './src/index.jsx',
   ],
@@ -33,7 +32,7 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'env'],
+            presets: ['@babel/preset-react', ['@babel/preset-env', { useBuiltIns: 'usage' }]],
             plugins: [
               ...(isProduction ? [
                 'transform-react-remove-prop-types',
@@ -48,7 +47,7 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: [['@babel/preset-env', { useBuiltIns: 'usage' }]],
           },
         },
       },
