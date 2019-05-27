@@ -33,42 +33,53 @@ export default class App extends React.Component {
     this.handleMenuClose = this.handleMenuClose.bind(this);
     this.menuWidth = 250;
   }
+
   handleLeftIconButtonClick(/* e */) {
-    this.setState({ menuOpened: !this.state.menuOpened });
+    const { menuOpened } = this.state;
+    this.setState({ menuOpened: !menuOpened });
   }
+
   handleRequestChange(open /* , reason */) {
     this.setState({ menuOpened: open });
   }
+
   handleMenuClick() {
-    if (this.state.menuDocked) return;
+    const { menuDocked } = this.state;
+    if (menuDocked) return;
     window.setTimeout(() => this.setState({ menuOpened: false }), 200);
   }
+
   handleMenuPinned() {
-    this.setState({ menuDocked: !this.state.menuDocked });
+    const { menuDocked } = this.state;
+    this.setState({ menuDocked: !menuDocked });
   }
+
   handleMenuClose() {
     this.setState({ menuOpened: false });
   }
+
   renderInner() {
-    const theme = this.context.muiTheme;
+    const { menuOpened, menuDocked } = this.state;
+    const { muiTheme } = this.context;
+    const { channelResolver } = this.props;
     const activeStyle = {
       display: 'block',
-      borderLeft: `${theme.spacing.desktopGutterMini}px solid ${theme.palette.primary1Color}`,
+      borderLeft: `${muiTheme.spacing.desktopGutterMini}px solid ${muiTheme.palette.primary1Color}`,
     };
     return (
-      <div style={{ marginLeft: this.state.menuOpened && this.state.menuDocked ? this.menuWidth : 0 }}>
+      <div style={{ marginLeft: menuOpened && menuDocked ? this.menuWidth : 0 }}>
         <AppBar
           title="Slack exported"
           onLeftIconButtonClick={this.handleLeftIconButtonClick}
         />
-        <Drawer open={this.state.menuOpened} docked={this.state.menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
+        <Drawer open={menuOpened} docked={menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
           <Toolbar>
             <ToolbarGroup firstChild>
               {/* Needs firstChild to align others to left */}
             </ToolbarGroup>
             <ToolbarGroup>
               <IconButton onClick={this.handleMenuPinned}>
-                {this.state.menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
+                {menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
               </IconButton>
               <IconButton onClick={this.handleMenuClose}>
                 <NavigationClose />
@@ -81,10 +92,11 @@ export default class App extends React.Component {
             </NavLink>
             <Divider />
             <Subheader>Channels</Subheader>
-            {this.props.channelResolver.listChannels().map(c => (
+            {channelResolver.listChannels().map(c => (
               <NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
                 <ListItem primaryText={c.name} />
-              </NavLink>))}
+              </NavLink>
+            ))}
           </List>
         </Drawer>
         <div style={{ padding: '8px' }}>
@@ -92,12 +104,15 @@ export default class App extends React.Component {
           <Route path="/channel/:channelName" component={DateSelector} />
           <Route path="/channel/:channelName/date/:date" component={HistoryView} />
         </div>
-      </div>);
+      </div>
+    );
   }
+
   render() {
+    const { channelResolver, userResolver } = this.props;
     return (
-      <ChannelResolverContext.Provider value={this.props.channelResolver}>
-        <UserResolverContext.Provider value={this.props.userResolver}>
+      <ChannelResolverContext.Provider value={channelResolver}>
+        <UserResolverContext.Provider value={userResolver}>
           {this.renderInner()}
         </UserResolverContext.Provider>
       </ChannelResolverContext.Provider>
@@ -109,5 +124,5 @@ App.propTypes = {
   userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
 App.contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: PropTypes.shape({}).isRequired,
 };

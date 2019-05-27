@@ -20,19 +20,25 @@ class HistoryView extends React.Component {
     }
     return null;
   }
+
   static generateJsonPath(channelName, date) {
     return `slack_export/${channelName}/${date}.json`;
   }
+
   componentDidMount() {
     this.fetchHistory();
   }
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.channelName !== prevState.channelName || this.state.date !== prevState.date) {
+    const { channelName, date } = this.state;
+    if (channelName !== prevState.channelName || date !== prevState.date) {
       this.fetchHistory();
     }
   }
+
   fetchHistory() {
-    window.fetch(`slack_export/${this.state.channelName}/${this.state.date}.json`)
+    const { channelName, date } = this.state;
+    window.fetch(`slack_export/${channelName}/${date}.json`)
       .then(util.checkStatus)
       .then(util.parseJSON)
       .then((data) => {
@@ -48,25 +54,45 @@ class HistoryView extends React.Component {
         });
       });
   }
+
   render() {
     const datetimeFormatter = dt => dt.toLocaleString();
-    const nodes = (this.state.data || []).map((m) => {
-      const user = this.props.userResolver.find(m.user);
+    const { data, message } = this.state;
+    const { userResolver } = this.props;
+    const nodes = (data || []).map((m) => {
+      const user = userResolver.find(m.user);
       const renderers = {
         root: p => (
           <div>
             <span className="header">
               {datetimeFormatter(new Date(m.ts * 1000))}
-              {user ? <React.Fragment> <img src={user.profile.image_24} alt="*" width="12" height="12" />{user.name}</React.Fragment> : null}
-              {m.bot_id ? <React.Fragment> (BOT) {m.bot_id}</React.Fragment> : null}
+              {user ? (
+                <React.Fragment>
+                  {' '}
+                  <img src={user.profile.image_24} alt="*" width="12" height="12" />
+                  {user.name}
+                </React.Fragment>
+              ) : null}
+              {m.bot_id ? (
+                <React.Fragment>
+                  {' '}
+                  (BOT)
+                  {m.bot_id}
+                </React.Fragment>
+              ) : null}
             </span>
             {p.children}
           </div>
         ),
       };
-      return (<li key={m.ts}><ReactMarkdown source={this.props.userResolver.replaceAll(m.text)} renderers={renderers} /></li>);
+      return (<li key={m.ts}><ReactMarkdown source={userResolver.replaceAll(m.text)} renderers={renderers} /></li>);
     });
-    return (<React.Fragment><div>{this.state.message}</div><ul id="history">{nodes}</ul></React.Fragment>);
+    return (
+      <React.Fragment>
+        <div>{message}</div>
+        <ul id="history">{nodes}</ul>
+      </React.Fragment>
+    );
   }
 }
 HistoryView.propTypes = {
