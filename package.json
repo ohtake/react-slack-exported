@@ -32,8 +32,10 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "http-server": "^0.11.1",
+    "finalhandler": "^1.1.2",
+    "morgan": "^1.9.1",
     "npm-run-all": "^4.1.5",
+    "serve-static": "^1.14.1",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1"
@@ -44,6 +46,6 @@
     "build:js": "cross-env NODE_ENV=production webpack --mode production --progress --colors --config webpack.config.babel.js",
     "build:summary": "babel-node generate_channel_summary.js",
     "start": "webpack-dev-server --mode development --progress --colors --config webpack.config.babel.js",
-    "server": "http-server"
+    "server": "babel-node server.js"
   }
 }
