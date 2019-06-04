@@ -30,4 +30,4 @@ ChannelSelector.propTypes = {
   channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
 };
 
-export default withTheme()(withChannelResolver(ChannelSelector));
+export default withTheme(withChannelResolver(ChannelSelector));

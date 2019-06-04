@@ -62,7 +62,7 @@ class App extends React.Component {
     const { menuOpened, menuDocked } = this.state;
     const { channelResolver, theme } = this.props;
     const activeStyle = {
-      borderLeft: `${theme.spacing.unit}px solid ${theme.palette.primary.main}`,
+      borderLeft: `${theme.spacing(1)}px solid ${theme.palette.primary.main}`,
     };
     return (
       <div style={{ marginLeft: menuOpened && menuDocked ? this.menuWidth : 0 }}>
@@ -130,4 +130,4 @@ App.propTypes = {
   userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
 
-export default withTheme()(App);
+export default withTheme(App);
