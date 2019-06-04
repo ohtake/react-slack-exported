@@ -72,7 +72,7 @@ class App extends React.Component {
               ? <IconButton onClick={this.handleLeftIconButtonClick}><MenuIcon /></IconButton>
               : null }
             <div style={{ flexGrow: 1 }}>
-              <Typography variant="title">Slack exported</Typography>
+              <Typography variant="h6">Slack exported</Typography>
             </div>
           </Toolbar>
         </AppBar>
