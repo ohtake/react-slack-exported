@@ -1,25 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createHashHistory } from 'history';
-import { Link as RouterLink } from 'react-router-dom';
-import FlatButton from 'material-ui/FlatButton';
+import { NavLink } from 'react-router-dom';
+import withTheme from '@material-ui/core/styles/withTheme';
+import Button from '@material-ui/core/Button';
 
 import { ChannelResolver } from './resolver';
 import { withChannelResolver } from './contexts';
 
 const ChannelSelector = (props) => {
-  const { channelResolver } = props;
+  const { channelResolver, theme } = props;
   const nodes = channelResolver.listChannels().map((c) => {
     const path = `/channel/${c.name}`;
-    const history = createHashHistory();
-    const currentPath = history.location.pathname;
     return (
-      <RouterLink key={c.name} to={path}>
-        <FlatButton key={c.id} primary={currentPath === path || currentPath.indexOf(`${path}/`) === 0}>
-          #
-          {c.name}
-        </FlatButton>
-      </RouterLink>
+      <Button component={NavLink} key={c.id} to={path} style={{ textTransform: 'none' }} activeStyle={{ backgroundColor: theme.palette.primary.light }}>
+        #
+        {c.name}
+      </Button>
     );
   });
   return (
@@ -30,7 +26,8 @@ const ChannelSelector = (props) => {
   );
 };
 ChannelSelector.propTypes = {
+  theme: PropTypes.shape({}).isRequired,
   channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
 };
 
-export default withChannelResolver(ChannelSelector);
+export default withTheme(withChannelResolver(ChannelSelector));

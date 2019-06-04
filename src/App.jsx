@@ -2,18 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Route } from 'react-router-dom';
 
-import AppBar from 'material-ui/AppBar';
-import Divider from 'material-ui/Divider';
-import Drawer from 'material-ui/Drawer';
-import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import withTheme from '@material-ui/core/styles/withTheme';
+import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-import ActionHome from 'material-ui/svg-icons/action/home';
-import ActionTurnedIn from 'material-ui/svg-icons/action/turned-in';
-import ActionTurnedInNot from 'material-ui/svg-icons/action/turned-in-not';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
+import ActionHome from '@material-ui/icons/Home';
+import ActionTurnedIn from '@material-ui/icons/TurnedIn';
+import ActionTurnedInNot from '@material-ui/icons/TurnedInNot';
+import NavigationClose from '@material-ui/icons/Close';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
 
 import ChannelSelector from './ChannelSelector';
 import DateSelector from './DateSelector';
@@ -21,12 +27,11 @@ import HistoryView from './HistoryView';
 import { ChannelResolver, UserResolver } from './resolver';
 import { ChannelResolverContext, UserResolverContext } from './contexts';
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor() {
     super();
     this.state = { menuOpened: false, menuDocked: false };
     this.handleLeftIconButtonClick = this.handleLeftIconButtonClick.bind(this);
-    this.handleRequestChange = this.handleRequestChange.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuPinned = this.handleMenuPinned.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
@@ -36,10 +41,6 @@ export default class App extends React.Component {
   handleLeftIconButtonClick(/* e */) {
     const { menuOpened } = this.state;
     this.setState({ menuOpened: !menuOpened });
-  }
-
-  handleRequestChange(open /* , reason */) {
-    this.setState({ menuOpened: open });
   }
 
   handleMenuClick() {
@@ -59,44 +60,49 @@ export default class App extends React.Component {
 
   renderInner() {
     const { menuOpened, menuDocked } = this.state;
-    const { muiTheme } = this.context;
-    const { channelResolver } = this.props;
+    const { channelResolver, theme } = this.props;
     const activeStyle = {
-      display: 'block',
-      borderLeft: `${muiTheme.spacing.desktopGutterMini}px solid ${muiTheme.palette.primary1Color}`,
+      borderLeft: `${theme.spacing(1)}px solid ${theme.palette.primary.main}`,
     };
     return (
       <div style={{ marginLeft: menuOpened && menuDocked ? this.menuWidth : 0 }}>
-        <AppBar
-          title="Slack exported"
-          onLeftIconButtonClick={this.handleLeftIconButtonClick}
-        />
-        <Drawer open={menuOpened} docked={menuDocked} onRequestChange={this.handleRequestChange} containerClassName="navigationMenu" width={this.menuWidth}>
+        <AppBar position="static">
           <Toolbar>
-            <ToolbarGroup firstChild>
-              {/* Needs firstChild to align others to left */}
-            </ToolbarGroup>
-            <ToolbarGroup>
+            {!menuOpened || !menuDocked
+              ? <IconButton onClick={this.handleLeftIconButtonClick}><MenuIcon /></IconButton>
+              : null }
+            <div style={{ flexGrow: 1 }}>
+              <Typography variant="h6">Slack exported</Typography>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Drawer open={menuOpened} variant={menuDocked ? 'persistent' : 'temporary'} onClose={this.handleMenuClose}>
+          <div style={{ width: this.menuWidth, overflowX: 'hidden' }}>
+            <Toolbar>
+              <div style={{ flexGrow: 1 }} />
               <IconButton onClick={this.handleMenuPinned}>
                 {menuDocked ? <ActionTurnedIn /> : <ActionTurnedInNot />}
               </IconButton>
               <IconButton onClick={this.handleMenuClose}>
                 <NavigationClose />
               </IconButton>
-            </ToolbarGroup>
-          </Toolbar>
-          <List>
-            <NavLink to="/" onClick={this.handleMenuClick} exact activeStyle={activeStyle}>
-              <ListItem primaryText="Home" leftIcon={<ActionHome />} />
-            </NavLink>
+            </Toolbar>
             <Divider />
-            <Subheader>Channels</Subheader>
-            {channelResolver.listChannels().map(c => (
-              <NavLink key={c.name} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
-                <ListItem primaryText={c.name} />
-              </NavLink>
-            ))}
-          </List>
+            <List>
+              <ListItem button component={NavLink} to="/" exact onClick={this.handleMenuClick} activeStyle={activeStyle}>
+                <ListItemIcon><ActionHome /></ListItemIcon>
+                <ListItemText>Home</ListItemText>
+              </ListItem>
+            </List>
+            <Divider />
+            <List subheader={<ListSubheader>Channels</ListSubheader>}>
+              {channelResolver.listChannels().map(c => (
+                <ListItem button component={NavLink} to={`/channel/${c.name}`} onClick={this.handleMenuClick} activeStyle={activeStyle}>
+                  <ListItemText>{c.name}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </div>
         </Drawer>
         <div style={{ padding: '8px' }}>
           <Route path="/" component={ChannelSelector} />
@@ -119,9 +125,9 @@ export default class App extends React.Component {
   }
 }
 App.propTypes = {
+  theme: PropTypes.shape({}).isRequired,
   channelResolver: PropTypes.instanceOf(ChannelResolver).isRequired,
   userResolver: PropTypes.instanceOf(UserResolver).isRequired,
 };
-App.contextTypes = {
-  muiTheme: PropTypes.shape({}).isRequired,
-};
+
+export default withTheme(App);

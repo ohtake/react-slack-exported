@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createHashHistory } from 'history';
 
-import DatePicker from 'material-ui/DatePicker';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import padStart from 'lodash/padStart';
 
@@ -37,7 +36,6 @@ class DateSelector extends React.Component {
   constructor() {
     super();
 
-    this.handleDateChange = this.handleDateChange.bind(this);
     this.handleHeatmapClick = this.handleHeatmapClick.bind(this);
     this.classForValue = this.classForValue.bind(this);
     this.state = {};
@@ -79,12 +77,6 @@ class DateSelector extends React.Component {
     history.push(`/channel/${channel.name}/date/${value.date}`);
   }
 
-  handleDateChange(n, date) {
-    const { channel } = this.state;
-    const history = createHashHistory();
-    history.push(`/channel/${channel.name}/date/${DateSelector.dateToString(date)}`);
-  }
-
   classForValue(value) {
     const { maxComments } = this.state;
     if (!value || value.count === 0) {
@@ -101,7 +93,7 @@ class DateSelector extends React.Component {
 
   render() {
     const {
-      minDate, maxDate, date, counts, channel,
+      minDate, maxDate, counts, channel,
     } = this.state;
     const { match } = this.props;
     if (!minDate) {
@@ -139,13 +131,6 @@ class DateSelector extends React.Component {
             classForValue={this.classForValue}
           />
         </div>
-        <DatePicker
-          floatingLabelText="PST/PDT date"
-          minDate={minDate}
-          maxDate={maxDate}
-          onChange={this.handleDateChange}
-          value={date}
-        />
       </React.Fragment>
     );
   }
